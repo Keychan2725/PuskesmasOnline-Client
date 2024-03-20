@@ -12,21 +12,19 @@ export default function RegisterUser() {
 
   const Register = async (e) => {
     e.preventDefault();
-  
-    
-  
+
     const reg = {
       email: email,
       password: password,
       username: username,
     };
-  
+
     try {
       const emailExists = await axios.post(
         "http://localhost:8080/api/user/checkEmail",
         { email: email }
       );
-  
+
       if (emailExists.data) {
         Swal.fire({
           icon: "error",
@@ -52,7 +50,6 @@ export default function RegisterUser() {
     }
   };
 
-
   const togglePassword = () => {
     if (passwordType === "password") {
       setPasswordType("text");
@@ -65,8 +62,8 @@ export default function RegisterUser() {
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
-            className="mx-auto h-10 w-auto"
-            src="../../asset/logo.png"
+            className="mx-auto h-32 w-auto"
+            src={require("../../asset/logo.png")}
             alt="Pusline"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">

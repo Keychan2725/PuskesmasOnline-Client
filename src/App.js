@@ -12,6 +12,8 @@ import RegisterAdmin from "./pages/auth/RegisterAdmin.js";
 import Otp from "./pages/otp/Otp.js";
 import PrivateReg from "./router/PrivateReg.js";
 import PrivateRegAdmin from "./router/PrivateRegAdmin.js";
+import Navbarr from "./component/Navbar.js";
+import Sidebarr from "./component/Sidebar.js";
 
 function App() {
   useEffect(() => {
@@ -35,8 +37,10 @@ function App() {
           <Route path="/register-user" element={<RegisterUser />} />
           <Route path="/register-admin" element={<RegisterAdmin />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/sidebar" element={<Sidebarr />} />
+          <Route path="/navbar" element={<Navbarr />} />
           <Route
-            path="/"
+            path="/dashboard-user"
             element={
               <PrivateRoute>
                 <DashboardUser />

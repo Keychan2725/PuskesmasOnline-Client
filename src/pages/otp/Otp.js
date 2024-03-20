@@ -2,7 +2,7 @@ import "react-phone-input-2/lib/style.css";
 import PhoneInput from "react-phone-input-2";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OTPInput from "react-otp-input";
 import {
   RecaptchaVerifier,
@@ -11,6 +11,7 @@ import {
 } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDrTcxR6wMZ_1_1Y3dDCDUy0D-Yfaj7maM",
   authDomain: "puskesmasonline-43c69.firebaseapp.com",
@@ -24,15 +25,15 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 export default function Otp() {
-  const [no, setNo] = useState("");
+  const [noTel, setNoTel] = useState("");
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const [showOtp, setShowOtp] = useState(false);
   const auth = getAuth();
   const [lastSentTime, setLastSentTime] = useState(null);
-  const [isExpired, setIsExpired] = useState(true);
-  const [timer, setTimer] = useState(null);
-  const [timerInterval, setTimerInterval] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const id = localStorage.getItem("id");
 
   const renderInput = (props, index) => {
     return <input {...props} />;
@@ -55,57 +56,59 @@ export default function Otp() {
       );
     }
   }
-  const Expired = () => {
-    const currentTime = new Date();
-    const timeDifference = (currentTime - lastSentTime) / 60000;
-    return timeDifference >= 1;
+  const getDelayTime = (retryCount) => {
+    const baseDelayTime = 1000; // 1 second
+    const maxDelayTime = 60000; // 1 minute
+    const delayTime = baseDelayTime * Math.pow(2, retryCount);
+    return Math.min(delayTime, maxDelayTime);
   };
 
-  function onSignup() {
-    if (Expired()) {
-      toast.error("Harap tunggu 1 menit sebelum mengirim kode OTP lagi.");
-      return;
-    }
+  const onSignup = () => {
+    if (noTel.length >= 10) {
+      setLoading(true);
+      onCaptchVerify();
 
-    setTimer(60);
-    setTimerInterval(
-      setInterval(() => {
-        setTimer((prevTimer) => {
-          if (prevTimer > 0) {
-            return prevTimer - 1;
-          } else {
-            clearInterval(timerInterval);
-            return null;
-          }
+      const appVerifier = window.recaptchaVerifier;
+      const formatNo = "+" + noTel;
+      signInWithPhoneNumber(auth, formatNo, appVerifier)
+        .then((confirmationResult) => {
+          window.confirmationResult = confirmationResult;
+          setLoading(false);
+          setShowOtp(true);
+          setLastSentTime(new Date());
+          toast.success("Berhasil Mengirim Otp");
+
+          const data = {
+            noTel: noTel,
+          };
+
+          axios
+            .put(`http://localhost:8080/api/user/${id}`, data)
+            .then((response) => {
+              console.log(response.data);
+            })
+            .catch((error) => {
+              console.log(error);
+              if (error.response.status === 429) {
+                // Too many requests error
+                setRetryCount(retryCount + 1);
+                setTimeout(() => {
+                  onSignup();
+                }, getDelayTime(retryCount));
+              }
+            });
+        })
+        .catch((error) => {
+          console.log(error.code);
+          console.log(error.message);
+          setLoading(false);
         });
-      }, 1000)
-    );
-
-    setLoading(true);
-    onCaptchVerify();
-
-    const appVerifier = window.recaptchaVerifier;
-    const formatNo = "+" + no;
-    signInWithPhoneNumber(auth, formatNo, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        setLoading(false);
-        setShowOtp(true);
-        setLastSentTime(new Date());
-        setIsExpired(false);
-        toast.success("Berhasil Mengirim Otp");
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-  }
+    } else {
+      toast.error("Nomer Telepon Tidak Boleh Kosong");
+    }
+  };
 
   function onOTPVer() {
-    if (Expired()) {
-      toast.error("Harap tunggu 1menit sebelum mengirim kode OTP lagi.");
-      return;
-    }
     setLoading(true);
     window.confirmationResult
       .confirm(otp)
@@ -129,7 +132,7 @@ export default function Otp() {
               Selamat Datang Di Pusline
             </h1>
             <Toaster toastOptions={{ duration: 4000 }} />
-            <div id="recaptcha-container"></div>
+
             {showOtp ? (
               <div>
                 <div className=" mb-5 text-rose-600 w-fit mx-auto p-4 rounded-full">
@@ -175,23 +178,31 @@ export default function Otp() {
                 />
                 <button
                   className="mt-5 text-white bg-rose-600 w-full flex gap-1 items-center justify-center py-2.5 text-white-rounded "
-                  onClick={onOTPVer}
+                  onClick={() => {
+                    setLoading(true);
+                    onOTPVer();
+                  }}
                 >
-                  {loading && (
+                  {loading ? (
                     <svg
-                      className="w-5 mt-1 animate-spin"
+                      className="w-5   mt-1 animate-spin"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
                     >
-                      {" "}
-                      <path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 01 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z" />
+                      <path
+                        fill="#ffffff"
+                        d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A4848 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"
+                      />
                     </svg>
+                  ) : (
+                    <span>Verifikasi Kode</span>
                   )}
-                  <span>Verifikasi Code</span>
                 </button>
               </div>
             ) : (
               <div>
+                <div id="recaptcha-container"></div>
+
                 <div className=" mb-5 text-rose-600 w-fit mx-auto p-4 rounded-full">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -213,31 +224,30 @@ export default function Otp() {
                     country="id"
                     defaultCountry="id"
                     className="mt-4"
-                    value={no}
-                    onChange={setNo}
+                    value={noTel}
+                    onChange={setNoTel}
                   />
                   <button
                     className="mt-5 text-white bg-rose-600 w-full flex gap-1 items-center justify-center py-2.5 text-white-rounded "
-                    onClick={onSignup}
-                    disabled={Expired() || timer !== null}
+                    onClick={() => {
+                      setLoading(true);
+                      onSignup();
+                    }}
                   >
-                    {loading && (
+                    {loading ? (
                       <svg
                         className="w-5   mt-1 animate-spin"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512 512"
                       >
-                        {" "}
-                        <path d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 01 0 142.9 437zm0-294.2A48 48 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z" />
+                        <path
+                          fill="#ffffff"
+                          d="M304 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zm0 416a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM48 304a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm464-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM142.9 437A48 48 0 1 0 75 369.1 48 48 0 1 0 142.9 437zm0-294.2A4848 0 1 0 75 75a48 48 0 1 0 67.9 67.9zM369.1 437A48 48 0 1 0 437 369.1 48 48 0 1 0 369.1 437z"
+                        />
                       </svg>
+                    ) : (
+                      <span>Kirim Kode</span>
                     )}
-                    {Expired()
-                      ? "Harap tunggu 1 menit"
-                      : timer !== null
-                      ? `${timer} detik`
-                      : "Kirim Code"}
-
-                    <span></span>
                   </button>
                 </>
               </div>

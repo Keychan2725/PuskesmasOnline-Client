@@ -11,33 +11,42 @@ export default function RegisterAdmin() {
   const navigate = useNavigate();
 
   const Register = async (e) => {
-    e.prevenDefault();
+    e.preventDefault();
+  
     const reg = {
       email: email,
       password: password,
       username: username,
     };
-
+  
     try {
+      const emailExists = await axios.post(
+        "http://localhost:8080/api/user/checkEmail",
+        { email: email }
+      );
+  
+      if (emailExists.data) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Email sudah digunakan",
+        });
+        return;
+      }
       const res = await axios.post(
         "http://localhost:8080/api/user/addAdmin",
         reg
       );
       Swal.fire({
         icon: "success",
-        title: "Berhasil Registrasi",
-        text: "Registrasi Berhasil",
+        title: "Sukses!",
+        text: "Registrasi akun 1 telah berhasil",
       });
-      localStorage.setItem("id", res.data.id);
-      localStorage.setItem("role", res.data.role);
+      localStorage.setItem("id", res.data.data.id);
+      localStorage.setItem("role", res.data.data.role);
       navigate("/otp-admin");
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        icon: "warning",
-        title: "Errroor",
-        text: "Erorr " + error,
-      });
     }
   };
 
@@ -52,9 +61,9 @@ export default function RegisterAdmin() {
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="../../asset/logo.png"
+        <img
+            className="mx-auto h-32 w-auto"
+            src={require("../../asset/logo.png")}
             alt="Pusline"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
