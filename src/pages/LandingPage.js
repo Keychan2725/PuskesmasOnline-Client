@@ -14,42 +14,42 @@ import {
 const api = "http://localhost:8080/api/user/all";
 
 export default function LandingPage() {
-  const [getSekolah, setGetSekolah] = useState([]);
+  const [getKlinik, setGetklinik] = useState([]);
 
   const sekolah = async () => {
     try {
       const response = await axios.get(`${api}`);
-      setGetSekolah(response.data);
+      setGetklinik(response.data);
     } catch (error) {
       console.log(error);
-      setGetSekolah([]);
+      setGetklinik([]);
     }
   };
 
   const handleSubmit = (selectedSekolah) => {
     if (selectedSekolah) {
       const sekolahId = selectedSekolah.id;
-      window.location.href = `/publik-sekolah/${sekolahId}`;
+      window.location.href = `/publik-klinik/${sekolahId}`;
     } else {
       const searchTerm = searchInput.value.toLowerCase();
-      const matchingSchools = getSekolah.filter((sekolah) =>
+      const matchingSchools = getKlinik.filter((sekolah) =>
         sekolah.namaSekolah.toLowerCase().includes(searchTerm)
       );
 
       if (matchingSchools.length) {
         const matchingSchool = matchingSchools[0];
-        window.location.href = `/publik-sekolah/${matchingSchool.id}`;
+        window.location.href = `/publik-klinik/${matchingSchool.id}`;
       } else {
         Swal.fire({
           icon: "warning",
-          text: "Sekolah Tidak Ditemukan",
+          text: "Klinik  Tidak Ditemukan",
         });
       }
     }
   };
 
-  const searchInput = document.getElementById("searchSekolah");
-  const schoolList = document.getElementById("schoolList");
+  const searchInput = document.getElementById("searchklinik");
+  const kliniklist = document.getElementById("kliniklist");
   let inputTimeout;
 
   const handleSearch = (e) => {
@@ -58,18 +58,18 @@ export default function LandingPage() {
     const searchTerm = e.target.value.toLowerCase();
 
     inputTimeout = setTimeout(() => {
-      if (schoolList) {
-        schoolList.innerHTML = "";
+      if (kliniklist) {
+        kliniklist.innerHTML = "";
       }
 
       if (searchTerm) {
         const loadingIndicator = document.createElement("div");
         loadingIndicator.textContent = "Loading...";
-        schoolList.appendChild(loadingIndicator);
+        kliniklist.appendChild(loadingIndicator);
 
         const suggestions = getSuggestions(searchTerm);
 
-        schoolList.removeChild(loadingIndicator);
+        kliniklist.removeChild(loadingIndicator);
 
         suggestions.forEach((suggestion) => {
           const listItem = document.createElement("div");
@@ -87,9 +87,9 @@ export default function LandingPage() {
             listItem.classList.remove("hover");
           });
 
-          schoolList.appendChild(listItem);
+          kliniklist.appendChild(listItem);
           const hr = document.createElement("hr");
-          schoolList.appendChild(hr);
+          kliniklist.appendChild(hr);
         });
       }
     }, 500);
@@ -97,11 +97,11 @@ export default function LandingPage() {
 
   const getSuggestions = (searchTerm) => {
     const suggestions = [];
-    for (const sekolah of getSekolah) {
-      if (sekolah.namaSekolah.toLowerCase().startsWith(searchTerm)) {
+    for (const klinik of getKlinik) {
+      if (klinik.username.toLowerCase().startsWith(searchTerm)) {
         suggestions.push({
-          data: sekolah,
-          value: sekolah.namaSekolah,
+          data: klinik,
+          value: klinik.username,
         });
       }
     }
@@ -158,7 +158,7 @@ export default function LandingPage() {
             <div className="w-75 pt-4 flex flex-direction: column items-center">
               <div className="mr-4 flex-grow">
                 <input
-                  id="searchSekolah"
+                  id="searchklinik"
                   type="text"
                   className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark"
                   placeholder="Cari Layanan"
@@ -167,7 +167,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div
-              id="schoolList"
+              id="kliniklist"
               className="text-dark dark:text-dark  p-1 "
             ></div>
           </div>

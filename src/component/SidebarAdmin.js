@@ -9,7 +9,7 @@ import IconLoader from "./Loader";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function Sidebar() {
+export default function SidebarAdmin() {
   const navigate = useNavigate();
   const id = localStorage.getItem("id");
   const AuthToken = localStorage.getItem("token");
@@ -156,7 +156,7 @@ export default function Sidebar() {
               </button>
               <div
                 id="dropdown-notification"
-                className="z-50 hidden bg-gray-700 divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700"
+                className="z-50 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700"
               >
                 <ul
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -225,7 +225,7 @@ export default function Sidebar() {
           <ul className="space-y-2 font-medium">
             <li>
               <a
-                onClick={() => handleNavigation("/sidebar")}
+                onClick={() => handleNavigation("/dashboard")}
                 className="flex items-center p-2 text-gray-100 rounded-lg  hover:bg-gray-800 hover:text-white group"
               >
                 <svg

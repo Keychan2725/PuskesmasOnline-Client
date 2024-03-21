@@ -12,8 +12,9 @@ import RegisterAdmin from "./pages/auth/RegisterAdmin.js";
 import Otp from "./pages/otp/Otp.js";
 import PrivateReg from "./router/PrivateReg.js";
 import PrivateRegAdmin from "./router/PrivateRegAdmin.js";
-import Navbarr from "./component/Navbar.js";
 import Sidebarr from "./component/Sidebar.js";
+import SidebarAdmin from "./component/SidebarAdmin.js";
+import SidebarSuperAdmin from "./component/SidebarSuperAdmin.js";
 
 function App() {
   useEffect(() => {
@@ -24,21 +25,28 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/otp-user" element={
-            <PrivateReg>
-              <Otp />
-            </PrivateReg>
-          } />
-          <Route path="/otp-admin" element={
-            <PrivateRegAdmin>
-              <Otp />
-            </PrivateRegAdmin>
-          } />
+          <Route
+            path="/otp-user"
+            element={
+              <PrivateReg>
+                <Otp />
+              </PrivateReg>
+            }
+          />
+          <Route
+            path="/otp-admin"
+            element={
+              <PrivateRegAdmin>
+                <Otp />
+              </PrivateRegAdmin>
+            }
+          />
           <Route path="/register-user" element={<RegisterUser />} />
           <Route path="/register-admin" element={<RegisterAdmin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/sidebar" element={<Sidebarr />} />
-          <Route path="/navbar" element={<Navbarr />} />
+          <Route path="/sidebar-admin" element={<SidebarAdmin />} />
+          <Route path="/sidebar-super-admin" element={<SidebarSuperAdmin />} />
           <Route
             path="/dashboard-user"
             element={

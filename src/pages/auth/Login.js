@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
 export default function Login() {
@@ -19,42 +20,54 @@ export default function Login() {
         }
       );
 
-      if (data.data.data.role === "admin") {
-        localStorage.setItem("token", data.data.data.token);
-        localStorage.setItem("role", data.data.data.role);
-        localStorage.setItem("userId", data.data.data.id);
+      if (data.data.data.codeVer !== "") {
+        if (data.data.data.role === "admin") {
+          localStorage.setItem("token", data.data.token);
+          localStorage.setItem("role", data.data.data.role);
+          localStorage.setItem("userId", data.data.data.id);
 
-        if (status === "Diterima") {
+          if (status === "Diterima") {
+            Swal.fire({
+              icon: "success",
+              title: "Berhasil masuk",
+            });
+            window.location.href = "/dashboard-admin";
+          } else {
+            Swal.fire({
+              icon: "success",
+              title: "Berhasil masuk",
+            });
+            window.location.href = "/dashboard-admin";
+          }
+        } else if (data.data.data.role === "user") {
+          localStorage.setItem("token", data.data.token);
+          localStorage.setItem("role", data.data.data.role);
+          localStorage.setItem("userId", data.data.data.id);
           Swal.fire({
             icon: "success",
             title: "Berhasil masuk",
           });
-          window.location.href = "/dashboard-admin";
+          window.location.href = "/dashboard-user";
+        } else if (data.data.data.role === "super_admin") {
+          localStorage.setItem("token", data.data.token);
+          localStorage.setItem("role", data.data.data.role);
+          localStorage.setItem("userId", data.data.data.id);
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil masuk",
+          });
+          window.location.href = "/dashboard-super-admin";
         } else {
           Swal.fire({
-            icon: "success",
-            title: "Berhasil masuk",
+            icon: "error",
+            title: "Akun Anda Belum Terdaftar",
           });
-          window.location.href = "/dashboard-admin";
         }
-      } else if (data.data.data.role === "user") {
-        localStorage.setItem("token", data.data.data.token);
-        localStorage.setItem("role", data.data.data.role);
-        localStorage.setItem("userId", data.data.data.id);
+      } else {
         Swal.fire({
-          icon: "success",
-          title: "Berhasil masuk",
+          icon: "error",
+          title: "Akun Anda Belum Terverifikasi",
         });
-        window.location.href = "/dashboard-user";
-      } else if (data.data.data.role === "super_admin") {
-        localStorage.setItem("token", data.data.data.token);
-        localStorage.setItem("role", data.data.data.role);
-        localStorage.setItem("userId", data.data.data.id);
-        Swal.fire({
-          icon: "success",
-          title: "Berhasil masuk",
-        });
-        window.location.href = "/dashboard-super-admin";
       }
     } catch (error) {
       Swal.fire({

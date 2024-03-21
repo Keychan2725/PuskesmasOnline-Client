@@ -65,16 +65,16 @@ export default function Otp() {
 
   const onSignup = () => {
     if (noTel.length >= 10) {
-      setLoading(true);
       onCaptchVerify();
+      setLoading(true);
 
       const appVerifier = window.recaptchaVerifier;
       const formatNo = "+" + noTel;
       signInWithPhoneNumber(auth, formatNo, appVerifier)
         .then((confirmationResult) => {
           window.confirmationResult = confirmationResult;
-          setLoading(false);
           setShowOtp(true);
+          setLoading(false);
           setLastSentTime(new Date());
           toast.success("Berhasil Mengirim Otp");
 
@@ -83,14 +83,14 @@ export default function Otp() {
           };
 
           axios
-            .put(`http://localhost:8080/api/user/${id}`, data)
+            .put(`http://localhost:8080/api/user/update-otp/${id}`, data)
             .then((response) => {
               console.log(response.data);
+              localStorage.setItem("noTel", response.data.noTel);
             })
             .catch((error) => {
               console.log(error);
               if (error.response.status === 429) {
-                // Too many requests error
                 setRetryCount(retryCount + 1);
                 setTimeout(() => {
                   onSignup();
@@ -101,10 +101,11 @@ export default function Otp() {
         .catch((error) => {
           console.log(error.code);
           console.log(error.message);
-          setLoading(false);
+          setLoading(false); // Loading dimatikan saat terjadi kesalahan
         });
     } else {
       toast.error("Nomer Telepon Tidak Boleh Kosong");
+      setLoading(false);
     }
   };
 
@@ -116,9 +117,31 @@ export default function Otp() {
         console.log(res);
         setLoading(false);
         toast.success("Berhasil Verifikasi");
+        const noTel = localStorage.getItem("noTel");
+        const data = {
+          codeVer: otp,
+          noTel: noTel,
+        };
+
+        axios
+          .put(`http://localhost:8080/api/user/update-otp/${id}`, data)
+          .then((response) => {
+            console.log(response.data);
+            window.location.href = "/login";
+          })
+          .catch((error) => {
+            console.log(error);
+            if (error.response.status === 429) {
+              setRetryCount(retryCount + 1);
+              setTimeout(() => {
+                onSignup();
+              }, getDelayTime(retryCount));
+            }
+          });
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
         toast.error("Kode Verifikasi Salah");
       });
   }

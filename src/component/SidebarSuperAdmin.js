@@ -9,7 +9,7 @@ import IconLoader from "./Loader";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function Sidebar() {
+export default function SidebarSuperAdmin() {
   const navigate = useNavigate();
   const id = localStorage.getItem("id");
   const AuthToken = localStorage.getItem("token");
@@ -156,7 +156,7 @@ export default function Sidebar() {
               </button>
               <div
                 id="dropdown-notification"
-                className="z-50 hidden bg-gray-700 divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700"
+                className="z-50 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700"
               >
                 <ul
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -225,7 +225,7 @@ export default function Sidebar() {
           <ul className="space-y-2 font-medium">
             <li>
               <a
-                onClick={() => handleNavigation("/sidebar")}
+                onClick={() => handleNavigation("/dashboard")}
                 className="flex items-center p-2 text-gray-100 rounded-lg  hover:bg-gray-800 hover:text-white group"
               >
                 <svg
@@ -248,7 +248,7 @@ export default function Sidebar() {
             </li>
             <li>
               <a
-                onClick={() => handleNavigation("/nomer-antrian")}
+                onClick={() => handleNavigation("/daftar-klinik")}
                 className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
               >
                 <svg
@@ -265,37 +265,11 @@ export default function Sidebar() {
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M18.5 12A2.5 2.5 0 0 1 21 9.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v2.5a2.5 2.5 0 0 1 0 5V17a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2.5a2.5 2.5 0 0 1-2.5-2.5Z"
+                    d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z"
                   />
                 </svg>
 
-                <span className="ms-3">Nomer Antrian</span>
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={() => handleNavigation("/reservasi-operasi")}
-                className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
-              >
-                <svg
-                  className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9.5 11H5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h4.5M7 11V7a3 3 0 0 1 6 0v1.5m2.5 5.5v1.5l1 1m3.5-1a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z"
-                  />
-                </svg>
-
-                <span className="ms-3">Reservasi Operasi</span>
+                <span className="ms-3">Daftar Rumah Sakit</span>
               </a>
             </li>
             <li>
