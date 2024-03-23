@@ -3,18 +3,13 @@ import axios from "axios";
 import Logo from "../asset/logo.png";
 import Swal from "sweetalert2";
 import Gambar from "../asset/2.jpg";
-import { Footer } from "flowbite-react";
-import {
-  BsDribbble,
-  BsFacebook,
-  BsGithub,
-  BsInstagram,
-  BsTwitter,
-} from "react-icons/bs";
-const api = "http://localhost:8080/api/user/all";
+import "./landingpage.css";
 
+const api = "http://localhost:8080/api/user/all";
 export default function LandingPage() {
   const [getKlinik, setGetklinik] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const sekolah = async () => {
     try {
@@ -26,86 +21,39 @@ export default function LandingPage() {
     }
   };
 
-  const handleSubmit = (selectedSekolah) => {
-    if (selectedSekolah) {
-      const sekolahId = selectedSekolah.id;
-      window.location.href = `/publik-klinik/${sekolahId}`;
-    } else {
-      const searchTerm = searchInput.value.toLowerCase();
-      const matchingSchools = getKlinik.filter((sekolah) =>
-        sekolah.namaSekolah.toLowerCase().includes(searchTerm)
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+
+    if (e.target.value) {
+      const matchingKliniks = getKlinik.filter((klinik) =>
+        klinik.namaKlinik.toLowerCase().includes(e.target.value)
       );
 
-      if (matchingSchools.length) {
-        const matchingSchool = matchingSchools[0];
-        window.location.href = `/publik-klinik/${matchingSchool.id}`;
+      setSearchResults(matchingKliniks);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const handleSubmit = (selectedKlinik) => {
+    if (selectedKlinik) {
+      window.location.href = `/publik-klinik/${selectedKlinik.id}`;
+    } else {
+      const searchTerm = searchQuery;
+      const matchingKliniks = getKlinik.filter((klinik) =>
+        klinik.namaKlinik.toLowerCase().includes(searchTerm)
+      );
+
+      if (matchingKliniks.length) {
+        const matchingKlinik = matchingKliniks[0];
+        window.location.href = `/publik-klinik/${matchingKlinik.id}`;
       } else {
         Swal.fire({
           icon: "warning",
-          text: "Klinik  Tidak Ditemukan",
+          text: "Klinik Tidak Ditemukan",
         });
       }
     }
-  };
-
-  const searchInput = document.getElementById("searchklinik");
-  const kliniklist = document.getElementById("kliniklist");
-  let inputTimeout;
-
-  const handleSearch = (e) => {
-    clearTimeout(inputTimeout);
-
-    const searchTerm = e.target.value.toLowerCase();
-
-    inputTimeout = setTimeout(() => {
-      if (kliniklist) {
-        kliniklist.innerHTML = "";
-      }
-
-      if (searchTerm) {
-        const loadingIndicator = document.createElement("div");
-        loadingIndicator.textContent = "Loading...";
-        kliniklist.appendChild(loadingIndicator);
-
-        const suggestions = getSuggestions(searchTerm);
-
-        kliniklist.removeChild(loadingIndicator);
-
-        suggestions.forEach((suggestion) => {
-          const listItem = document.createElement("div");
-          listItem.classList.add("list-item");
-          listItem.textContent = suggestion.value;
-
-          listItem.addEventListener("click", () => {
-            searchInput.value = suggestion.value;
-            handleSubmit(suggestion.data);
-            handleSearch(e);
-            listItem.classList.add("hover");
-          });
-
-          listItem.addEventListener("mouseleave", () => {
-            listItem.classList.remove("hover");
-          });
-
-          kliniklist.appendChild(listItem);
-          const hr = document.createElement("hr");
-          kliniklist.appendChild(hr);
-        });
-      }
-    }, 500);
-  };
-
-  const getSuggestions = (searchTerm) => {
-    const suggestions = [];
-    for (const klinik of getKlinik) {
-      if (klinik.username.toLowerCase().startsWith(searchTerm)) {
-        suggestions.push({
-          data: klinik,
-          value: klinik.username,
-        });
-      }
-    }
-    return suggestions;
   };
 
   useEffect(() => {
@@ -115,9 +63,9 @@ export default function LandingPage() {
   return (
     <>
       <header>
-        <nav className="border-gray-200 px-4 lg:px-6 py-2.5 bg-rose-600">
-          <div className="flex items-center lg:order-2 md:flex justify-between flex-grow">
-            <div className="flex justify-between">
+        <nav className={`sticky top-0 w-full h-16 z-10 bg-rose-500`}>
+          <div className="flex items-center justify-between flex-grow">
+            <div className="flex items-center">
               <img
                 src={Logo}
                 className="mx-34 h-16 sm:h-18"
@@ -128,34 +76,37 @@ export default function LandingPage() {
               </span>
             </div>
 
-            <div className="flex items-center lg:order-2">
-              <a
-                href="/login"
-                className=" text-white focus:ring-4 focus:ring-gray-300 focus:hover:bg-rose-300  font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:hover:bg-rose-300 focus:outline-none dark:focus:ring-gray-300"
-              >
-                Masuk
-              </a>
-              <a
-                href="/register"
-                className=" bg-gray-900 text-white focus:ring-4 focus:ring-white focus:hover:bg-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-gray-900 dark:hover:bg-gray-300 focus:outline-none dark:focus:ring-white"
-              >
-                Daftar
-              </a>
+            <div className="flex items-center">
+              <div className="flex items-center md:order-2">
+                <a
+                  href="/login"
+                  className="text-white focus:ring-4 focus:ring-gray-300 focus:hover:bg-rose-300  font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:hover:bg-rose-300 focus:outline-none dark:focus:ring-gray-300"
+                >
+                  Masuk
+                </a>
+                <a
+                  href="/register"
+                  className="bg-gray-900 text-white focus:ring-4 focus:ring-white focus:hover:bg-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-gray-900 dark:hover:bg-gray-300 focus:outline-none dark:focus:ring-white"
+                >
+                  Daftar
+                </a>
+              </div>
             </div>
           </div>
         </nav>
       </header>
+
       <section className="bg-gray-100">
         <div className="  grid  max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:px-16  lg:grid-cols-12  ">
           <div className=" place-self-center lg:col-span-7">
             <h1 className="max-w-2xl mb-4 mx-auto text-4xl font-extrabold leading-none md:text-5xl xl:text-6xl text-rose-600">
               PUSLINE
             </h1>
-            <p className="max-w-2xl mb-6 font-light text-gray-700 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-800">
+            <p className="max-w-2xl mb-6 font-light text-gray-700 lg:mb-8 md:text-lglg:text-xl dark:text-gray-800">
               Kami Peduli Dengan Kesehatan Anda
             </p>
 
-            <div className="w-75 pt-4 flex flex-direction: column items-center">
+            <div className="w-75 pt-4 flex flex-column items-center">
               <div className="mr-4 flex-grow">
                 <input
                   id="searchklinik"
@@ -163,13 +114,24 @@ export default function LandingPage() {
                   className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark"
                   placeholder="Cari Layanan"
                   onChange={handleSearch}
+                  value={searchQuery}
                 />
+
+                {searchResults.length > 0 && (
+                  <ul className="list-unstyled z-100 absolute top-full w-full left-0 bg-white border border-gray-300 rounded shadow-lg">
+                    {searchResults.map((klinik) => (
+                      <li
+                        key={klinik.id}
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleSubmit(klinik)}
+                      >
+                        {klinik.namaKlinik}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
-            <div
-              id="kliniklist"
-              className="text-dark dark:text-dark  p-1 "
-            ></div>
           </div>
 
           <div className="hidden rounded-s-full  lg:mt-0 lg:col-span-5 lg:flex">
