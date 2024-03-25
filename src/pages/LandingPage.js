@@ -4,14 +4,18 @@ import Logo from "../asset/logo.png";
 import Swal from "sweetalert2";
 import Gambar from "../asset/2.jpg";
 import "./landingpage.css";
+import { Button, Modal } from "flowbite-react";
+import { FaRegRegistered } from "react-icons/fa6";
+import { HiOutlineX } from "react-icons/hi";
 
-const api = "http://localhost:8080/api/user/all";
+const api = "http://localhost:8080/api/admin/all";
 export default function LandingPage() {
   const [getKlinik, setGetklinik] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [openModal, setOpenModal] = useState(false);
 
-  const sekolah = async () => {
+  const klinik = async () => {
     try {
       const response = await axios.get(`${api}`);
       setGetklinik(response.data);
@@ -25,9 +29,14 @@ export default function LandingPage() {
     setSearchQuery(e.target.value.toLowerCase());
 
     if (e.target.value) {
-      const matchingKliniks = getKlinik.filter((klinik) =>
-        klinik.namaKlinik.toLowerCase().includes(e.target.value)
-      );
+      const matchingKliniks = getKlinik.filter((klinik) => {
+        if (klinik.namaKlinik) {
+          return klinik.namaKlinik
+            .toUpperCase()
+            .includes(e.target.value.toUpperCase());
+        }
+        return false;
+      });
 
       setSearchResults(matchingKliniks);
     } else {
@@ -57,7 +66,7 @@ export default function LandingPage() {
   };
 
   useEffect(() => {
-    sekolah();
+    klinik();
   }, []);
 
   return (
@@ -77,19 +86,53 @@ export default function LandingPage() {
             </div>
 
             <div className="flex items-center">
-              <div className="flex items-center md:order-2">
+              <div className="flex items-center">
                 <a
                   href="/login"
                   className="text-white focus:ring-4 focus:ring-gray-300 focus:hover:bg-rose-300  font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:hover:bg-rose-300 focus:outline-none dark:focus:ring-gray-300"
                 >
                   Masuk
                 </a>
-                <a
-                  href="/register"
-                  className="bg-gray-900 text-white focus:ring-4 focus:ring-white focus:hover:bg-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-gray-900 dark:hover:bg-gray-300 focus:outline-none dark:focus:ring-white"
+                <button
+                  type="button"
+                  className="text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-gray-900 dark:hover:bg-gray-300 focus:outline-none dark:focus:ring-gray-500"
+                  onClick={() => setOpenModal(true)}
                 >
-                  Daftar
-                </a>
+                  Registrasi
+                </button>
+                {openModal && (
+                  <Modal
+                    show={openModal}
+                    size="sm"
+                    onClose={() => setOpenModal(false)}
+                    popup
+                  >
+                    <Modal.Header />
+                    <Modal.Body className="text-center">
+                      <FaRegRegistered
+                        className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200"
+                        aria-hidden="true"
+                      />
+                      <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                        Silahkan Pilih Registrasi Sebagai ?
+                      </h3>
+                      <div className="flex justify-center gap-4">
+                        <a
+                          href="/register-admin"
+                          className="bg-rose-700 hover:bg-rose-700 focus:ring-4 focus:ring-blue-100 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-rose-600 dark:hover:bg-rose-700 focus:outline-none "
+                        >
+                          Admin
+                        </a>
+                        <a
+                          href="/register-user"
+                          className="bg-gray-300 hover:bg-gray-400 focus:ring-4 focus:ring-blue-100 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-gray-300 dark:hover:bg-gray-400 focus:outline-none "
+                        >
+                          USer
+                        </a>
+                      </div>
+                    </Modal.Body>
+                  </Modal>
+                )}
               </div>
             </div>
           </div>

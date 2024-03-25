@@ -78,7 +78,7 @@ export default function RegisterAdmin() {
                 htmlFor="username"
                 className="block float-left mb-1 text-sm font-medium leading-6 text-gray-900"
               >
-                Nama Klinik
+                Username
               </label>
               <div className="mt-2">
                 <input

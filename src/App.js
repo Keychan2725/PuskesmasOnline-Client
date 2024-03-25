@@ -15,13 +15,15 @@ import PrivateRegAdmin from "./router/PrivateRegAdmin.js";
 import Sidebarr from "./component/Sidebar.js";
 import SidebarAdmin from "./component/SidebarAdmin.js";
 import SidebarSuperAdmin from "./component/SidebarSuperAdmin.js";
+import Antrian from "./pages/user/antrian/Antrian.js";
+import AmbilAntrian from "./pages/user/antrian/AmbilAntrian";
 
 function App() {
   useEffect(() => {
     initFlowbite();
   }, []);
   return (
-    <div className="App">
+    <div className="App ">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -45,6 +47,8 @@ function App() {
           <Route path="/register-admin" element={<RegisterAdmin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/sidebar" element={<Sidebarr />} />
+          <Route path="/nomer-antrian" element={<Antrian />} />
+          <Route path="/ambil-antrian/:klinikId" element={<AmbilAntrian />} />
           <Route path="/sidebar-admin" element={<SidebarAdmin />} />
           <Route path="/sidebar-super-admin" element={<SidebarSuperAdmin />} />
           <Route
