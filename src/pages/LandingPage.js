@@ -108,7 +108,7 @@ export default function LandingPage() {
                     popup
                   >
                     <Modal.Header />
-                    <Modal.Body className="text-center">
+                    <Modal.Body className="text-center h-full">
                       <FaRegRegistered
                         className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200"
                         aria-hidden="true"
@@ -127,7 +127,7 @@ export default function LandingPage() {
                           href="/register-user"
                           className="bg-gray-300 hover:bg-gray-400 focus:ring-4 focus:ring-blue-100 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-gray-300 dark:hover:bg-gray-400 focus:outline-none "
                         >
-                          USer
+                          User
                         </a>
                       </div>
                     </Modal.Body>
