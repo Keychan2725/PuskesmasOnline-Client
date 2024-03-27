@@ -1,17 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../../component/Sidebar";
-
+import { useMediaQuery } from "react-responsive";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Aos from "aos";
+import IconLoader from "../../../component/Loader";
 export default function AmbilAntrian() {
+  const deviceMode = useMediaQuery({ query: "(max-width: 767px)" });
+  const dekstopMode = useMediaQuery({ query: "(min-width: 768px)" });
+  const [openAntrian, setOpenAntrian] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState("");
+
+  const getDataUser = async () => {
+    try {
+      const response = await axios.get(``);
+      setUser(response.data);
+    } catch (error) {
+      console.log(error);
+      toast.error("Gagal Menambil Data User");
+    }
+  };
+
+  const handleNavigation = (to) => {
+    setLoading(true);
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    delay(1000)
+      .then(() => {
+        window.location.href = to;
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    Aos.init();
+  }, []);
   return (
     <>
+      {loading && <IconLoader />}
       <Sidebar />
       <div className="flex justify-center w-[100%] mt-20">
         <section className="s-content w-[390px] md:w-[1125px] px-5 md:px-10  py-5">
-          <div className="card bg-white w-12/12 h-44  rounded-zl">
+          <div className="bg-white w-12/12 h-44  rounded-xl">
             <div className="flex justify-around grid grid-cols-1 gap-2 md:grid-cols-2  ">
-              <div className="flex justify-between">
-                <div className="h-36 w-32 my-4 mx-5  rounded-full bg-rose-500">
-                  <img src="" alt="" />
+              <div className="flex justify-evenly">
+                <div className="h-36 w-32 my-4 mx-5  rounded-full ">
+                  <img src={require("../../../asset/logo.png")} alt="Logo" />
                 </div>
                 <div className="block">
                   <div className="my-4 mx-1 ">
@@ -21,7 +58,7 @@ export default function AmbilAntrian() {
                   </div>
                   <hr />
                   <div className="block flex-col">
-                    <div className="flex justify-around gap-2 my-2 mx-1">
+                    <div className="flex justify-start gap-2 my-2 mx-1">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 384 512"
@@ -39,7 +76,7 @@ export default function AmbilAntrian() {
                     <div className="my-2 mx-1">
                       <h2 className="text-xs font-semibold text-gray-900"></h2>
                     </div>
-                    <div className="flex justify-around gap-2 my-2 mx-1 ">
+                    <div className="flex justify-start gap-2 my-2 mx-1 ">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="w-3"
@@ -55,16 +92,79 @@ export default function AmbilAntrian() {
                         Negeri
                       </h2>
                     </div>
+                    <div className="flex justify-start gap-2 my-2 mx-1 md:hidden">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 576 512"
+                        className="w-3"
+                      >
+                        {" "}
+                        <path
+                          fill="#e51515"
+                          d="M64 64C28.7 64 0 92.7 0 128v64c0 8.8 7.4 15.7 15.7 18.6C34.5 217.1 48 235 48 256s-13.5 38.9-32.3 45.4C7.4 304.3 0 311.2 0 320v64c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V320c0-8.8-7.4-15.7-15.7-18.6C541.5 294.9 528 277 528 256s13.5-38.9 32.3-45.4c8.3-2.9 15.7-9.8 15.7-18.6V128c0-35.3-28.7-64-64-64H64zm64 112l0 160c0 8.8 7.2 16 16 16H432c8.8 0 16-7.2 16-16V176c0-8.8-7.2-16-16-16H144c-8.8 0-16 7.2-16 16zM96 160c0-17.7 14.3-32 32-32H448c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H128c-17.7 0-32-14.3-32-32V160z"
+                        />
+                      </svg>
+                      <h2 className="text-xs font-bold text-green-500 ">
+                        33 Tersisa
+                      </h2>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="my-16 mx-24">
-                <h2 className="text-2xl font-bold text-green-500">
-                  34 Tersisa
-                </h2>
-              </div>
+              {!deviceMode && (
+                <div className="my-16 mx-24 flex justify-around ">
+                  <h2 className="text-2xl font-bold text-green-500 ">
+                    33 Tersisa
+                  </h2>
+                </div>
+              )}
             </div>
           </div>
+          {openAntrian && (
+            <>
+              <center>
+                <div
+                  data-aos="zoom-in-down"
+                  className=" mt-5 bg-white w-8/12 h-44  rounded-xl "
+                >
+                  <div className="flex justify-center pt-10 ">
+                    <div className="text-center">
+                      <p className="text-gray-900 text-xl font-semibold">
+                        Nomer Antrian Anda
+                      </p>
+                      <hr />
+                      <h2 className="text-2xl pt-3 font-bold text-green-500 ">
+                        34
+                      </h2>
+                    </div>
+                  </div>
+                  <div className="float-end px-5 pt-4 ">
+                    <button
+                      onClick={() =>
+                        handleNavigation("/detail-nomer-antrian/:idAntrian")
+                      }
+                      className="bg-sky-600 w-16 h-8 rounded-xl text-white"
+                      href=""
+                    >
+                      Detail
+                    </button>
+                  </div>
+                </div>
+              </center>
+            </>
+          )}
+          {!openAntrian && (
+            <>
+              <div className="float-end  ">
+                <button
+                  onClick={() => setOpenAntrian(true)}
+                  className="bg-rose-600 h-8 w-auto mx-2 my-3 rounded-lg text-white "
+                >
+                  <span className="px-3">Ambil Antrian</span>
+                </button>
+              </div>
+            </>
+          )}
         </section>
       </div>
     </>

@@ -100,39 +100,6 @@ export default function LandingPage() {
                 >
                   Registrasi
                 </button>
-                {openModal && (
-                  <Modal
-                    show={openModal}
-                    size="sm"
-                    onClose={() => setOpenModal(false)}
-                    popup
-                  >
-                    <Modal.Header />
-                    <Modal.Body className="text-center h-full">
-                      <FaRegRegistered
-                        className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200"
-                        aria-hidden="true"
-                      />
-                      <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                        Silahkan Pilih Registrasi Sebagai ?
-                      </h3>
-                      <div className="flex justify-center gap-4">
-                        <a
-                          href="/register-admin"
-                          className="bg-rose-700 hover:bg-rose-700 focus:ring-4 focus:ring-blue-100 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-rose-600 dark:hover:bg-rose-700 focus:outline-none "
-                        >
-                          Admin
-                        </a>
-                        <a
-                          href="/register-user"
-                          className="bg-gray-300 hover:bg-gray-400 focus:ring-4 focus:ring-blue-100 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-gray-300 dark:hover:bg-gray-400 focus:outline-none "
-                        >
-                          User
-                        </a>
-                      </div>
-                    </Modal.Body>
-                  </Modal>
-                )}
               </div>
             </div>
           </div>
@@ -431,6 +398,58 @@ export default function LandingPage() {
           </p>
         </div>
       </footer>
+
+      {/* modal */}
+      {/* modal  */}
+      {openModal ? (
+        <>
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-1 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                  <h3 className="text-3xl font-semibold">Registrasi</h3>
+                  <button
+                    className="p-1 ml-auto bg-transparent border-0 opacity-20 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={() => setOpenModal(false)}
+                  >
+                    <span className="bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      ×
+                    </span>
+                  </button>
+                </div>
+                {/*body*/}
+                <div className="relative flex-auto">
+                  <div className="space-y-4 p-3">
+                    <div className="py-3">
+                      <p className="text-lg font-medium mt-5">
+                        Silahkan Pilih Metode Registrasi{" "}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-end gap-5 p-3 border-t border-solid border-slate-200 rounded-b">
+                      <a
+                        href="/register-admin"
+                        className="text-white bg-red-700 font-bold uppercase px-6 py-3.5 rounded-md text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      >
+                        Admin
+                      </a>
+                      <a
+                        href="/register-user"
+                        className="bg-gradient-to-r from-[#0b409c] to-[#10316b] text-white active:bg-gray-400 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      >
+                        User
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {/*footer*/}
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
     </>
   );
 }

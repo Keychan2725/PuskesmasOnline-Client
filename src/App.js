@@ -17,6 +17,7 @@ import SidebarAdmin from "./component/SidebarAdmin.js";
 import SidebarSuperAdmin from "./component/SidebarSuperAdmin.js";
 import Antrian from "./pages/user/antrian/Antrian.js";
 import AmbilAntrian from "./pages/user/antrian/AmbilAntrian";
+import DetailNomerAntrian from "./pages/user/antrian/DetailNomerAntrian.js";
 
 function App() {
   useEffect(() => {
@@ -48,6 +49,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/sidebar" element={<Sidebarr />} />
           <Route path="/nomer-antrian" element={<Antrian />} />
+          <Route path="/detail-nomer-antrian/:idAntrian" element={<DetailNomerAntrian />} />
           <Route path="/ambil-antrian/:klinikId" element={<AmbilAntrian />} />
           <Route path="/sidebar-admin" element={<SidebarAdmin />} />
           <Route path="/sidebar-super-admin" element={<SidebarSuperAdmin />} />
