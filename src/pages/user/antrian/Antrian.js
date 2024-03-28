@@ -40,7 +40,7 @@ export default function Antrian() {
       {loading && <IconLoader />}
       <Sidebar />
       <div className="flex justify-center w-[100%] mt-20">
-        <section className="s-content w-[390px] md:w-[1125px] px-5 md:px-10  py-5">
+        <section className="s-content w-[390px] md:w-[1125px] px-5 md:px-10  py-5 ">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {klinikList.map((klinik) => (
               <a

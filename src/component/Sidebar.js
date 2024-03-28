@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import IconLoader from "./Loader";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getElementError } from "@testing-library/react";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -68,6 +69,7 @@ export default function Sidebar() {
   //   getAkun();
   // }, []);
 
+
   const handleNavigation = (to) => {
     setLoading(true);
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -98,6 +100,7 @@ export default function Sidebar() {
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
               <button
+                id="sidebar-togle"
                 data-drawer-target="logo-sidebar"
                 data-drawer-toggle="logo-sidebar"
                 aria-controls="logo-sidebar"
@@ -216,114 +219,134 @@ export default function Sidebar() {
         </div>
       </nav>
 
-      <aside
-        id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-700 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-        aria-label="Sidebar"
-      >
-        <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-          <ul className="space-y-2 font-medium">
-            <li>
-              <a
-                onClick={() => handleNavigation("/sidebar")}
-                className="flex items-center p-2 text-gray-100 rounded-lg  hover:bg-gray-800 hover:text-white group"
-              >
-                <svg
-                  className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
+      <>
+        <aside
+          id="logo-sidebar"
+          className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-700 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+          aria-label="Sidebar"
+        >
+          <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+            <ul className="space-y-2 font-medium">
+              <li>
+                <a
+                  onClick={() => handleNavigation("/sidebar")}
+                  className="flex items-center p-2 text-gray-100 rounded-lg  hover:bg-gray-800 hover:text-white group"
                 >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 8v10a1 1 0 0 0 1 1h4v-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5h4a1 1 0 0 0 1-1V8M1 10l9-9 9 9"
-                  />
-                </svg>
-                <span className="ms-3">Dashboard</span>
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={() => handleNavigation("/nomer-antrian")}
-                className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
-              >
-                <svg
-                  className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
+                  <svg
+                    className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M3 8v10a1 1 0 0 0 1 1h4v-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5h4a1 1 0 0 0 1-1V8M1 10l9-9 9 9"
+                    />
+                  </svg>
+                  <span className="ms-3">Dashboard</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  onClick={() => handleNavigation("/nomer-antrian")}
+                  className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
                 >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M18.5 12A2.5 2.5 0 0 1 21 9.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v2.5a2.5 2.5 0 0 1 0 5V17a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2.5a2.5 2.5 0 0 1-2.5-2.5Z"
-                  />
-                </svg>
+                  <svg
+                    className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M18.5 12A2.5 2.5 0 0 1 21 9.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v2.5a2.5 2.5 0 0 1 0 5V17a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2.5a2.5 2.5 0 0 1-2.5-2.5Z"
+                    />
+                  </svg>
 
-                <span className="ms-3">Nomer Antrian</span>
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={() => handleNavigation("/reservasi-operasi")}
-                className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
-              >
-                <svg
-                  className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
+                  <span className="ms-3">Nomer Antrian</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  onClick={() => handleNavigation("/reservasi-operasi")}
+                  className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
                 >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9.5 11H5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h4.5M7 11V7a3 3 0 0 1 6 0v1.5m2.5 5.5v1.5l1 1m3.5-1a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z"
-                  />
-                </svg>
+                  <svg
+                    className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9.5 11H5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h4.5M7 11V7a3 3 0 0 1 6 0v1.5m2.5 5.5v1.5l1 1m3.5-1a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z"
+                    />
+                  </svg>
 
-                <span className="ms-3">Reservasi Operasi</span>
-              </a>
-            </li>
-            <li>
+                  <span className="ms-3">Reservasi Operasi</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  onClick={() => handleNavigation("/akun")}
+                  className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
+                >
+                  <svg
+                    className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 19a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 11 14H9a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 10 19Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                  <span className="ms-3">Akun</span>
+                </a>
+              </li>
+            </ul>
+            <div className="absolute bottom-0 left-0 right-0 p-3">
               <a
-                onClick={() => handleNavigation("/akun")}
-                className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
+                onClick={logout}
+                className="flex items-center justify-start w-full py-2 text-gray-100 bg-gray-800 rounded-lg hover:bg-gray-700"
               >
                 <svg
-                  className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
-                  aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
+                  className="w-10 h-8"
+                  viewBox="0 0 448 512"
                 >
                   <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10 19a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 11 14H9a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 10 19Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    fill="#ff0000"
+                    d="M224 96a160 160 0 1 0 0 320 160 160 0 1 0 0-320zM448 256A224 224 0 1 1 0 256a224 224 0 1 1 448 0z"
                   />
                 </svg>
-                <span className="ms-3">Akun</span>
+                <span className="mr-2">Log Out</span>
               </a>
-            </li>
-          </ul>
-        </div>
-      </aside>
+            </div>
+          </div>
+        </aside>
+      </>
     </>
   );
 }

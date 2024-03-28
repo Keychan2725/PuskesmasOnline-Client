@@ -14,7 +14,7 @@ export default function AmbilAntrian() {
 
   const getDataUser = async () => {
     try {
-      const response = await axios.get(``);
+      const response = await axios.get(`http://localhost:8080/`);
       setUser(response.data);
     } catch (error) {
       console.log(error);

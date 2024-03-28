@@ -18,6 +18,10 @@ import SidebarSuperAdmin from "./component/SidebarSuperAdmin.js";
 import Antrian from "./pages/user/antrian/Antrian.js";
 import AmbilAntrian from "./pages/user/antrian/AmbilAntrian";
 import DetailNomerAntrian from "./pages/user/antrian/DetailNomerAntrian.js";
+import PrivateNomerAntrian from "./router/PrivateNomerAntrian.js";
+import PrivateAdmin from "./router/PrivateAdmin.js";
+import DashboardAdmin from "./pages/admin/Dashboard.js";
+import SetingAntrian from "./pages/admin/SetingAntrian.js";
 
 function App() {
   useEffect(() => {
@@ -28,6 +32,12 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/sidebar-admin" element={<SidebarAdmin />} />
+          <Route path="/sidebar-super-admin" element={<SidebarSuperAdmin />} />
+          <Route path="/register-user" element={<RegisterUser />} />
+          <Route path="/register-admin" element={<RegisterAdmin />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/sidebar" element={<Sidebarr />} />
           <Route
             path="/otp-user"
             element={
@@ -43,16 +53,31 @@ function App() {
                 <Otp />
               </PrivateRegAdmin>
             }
+          />{" "}
+          <Route
+            path="/nomer-antrian"
+            element={
+              <PrivateNomerAntrian>
+                <Antrian />
+              </PrivateNomerAntrian>
+            }
           />
-          <Route path="/register-user" element={<RegisterUser />} />
-          <Route path="/register-admin" element={<RegisterAdmin />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/sidebar" element={<Sidebarr />} />
-          <Route path="/nomer-antrian" element={<Antrian />} />
-          <Route path="/detail-nomer-antrian/:idAntrian" element={<DetailNomerAntrian />} />
-          <Route path="/ambil-antrian/:klinikId" element={<AmbilAntrian />} />
-          <Route path="/sidebar-admin" element={<SidebarAdmin />} />
-          <Route path="/sidebar-super-admin" element={<SidebarSuperAdmin />} />
+          <Route
+            path="/detail-nomer-antrian/:idAntrian"
+            element={
+              <PrivateNomerAntrian>
+                <DetailNomerAntrian />
+              </PrivateNomerAntrian>
+            }
+          />
+          <Route
+            path="/ambil-antrian/:klinikId"
+            element={
+              <PrivateRoute>
+                <AmbilAntrian />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/dashboard-user"
             element={
@@ -61,6 +86,23 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/dashboard-admin"
+            element={
+            <PrivateAdmin>
+              <DashboardAdmin/>
+            </PrivateAdmin>
+            }
+          />
+          <Route
+            path="/seting-antrian"
+            element={
+            <PrivateAdmin>
+              <SetingAntrian/>
+            </PrivateAdmin>
+            }
+          />
+
         </Routes>
       </BrowserRouter>
     </div>

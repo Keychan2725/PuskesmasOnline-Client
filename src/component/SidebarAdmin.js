@@ -248,7 +248,7 @@ export default function SidebarAdmin() {
             </li>
             <li>
               <a
-                onClick={() => handleNavigation("/nomer-antrian")}
+                onClick={() => handleNavigation("/seting-antrian")}
                 className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
               >
                 <svg
@@ -269,7 +269,7 @@ export default function SidebarAdmin() {
                   />
                 </svg>
 
-                <span className="ms-3">Nomer Antrian</span>
+                <span className="ms-3">Seting Antrian</span>
               </a>
             </li>
             <li>
@@ -322,6 +322,24 @@ export default function SidebarAdmin() {
               </a>
             </li>
           </ul>
+          <div className="absolute bottom-0 left-0 right-0 p-3">
+            <a
+              onClick={logout}
+              className="flex items-center justify-start w-full py-2 text-gray-100 bg-gray-800 rounded-lg hover:bg-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-10 h-8"
+                viewBox="0 0 448 512"
+              >
+                <path
+                  fill="#ff0000"
+                  d="M224 96a160 160 0 1 0 0 320 160 160 0 1 0 0-320zM448 256A224 224 0 1 1 0 256a224 224 0 1 1 448 0z"
+                />
+              </svg>
+              <span className="mr-2">Log Out</span>
+            </a>
+          </div>
         </div>
       </aside>
     </>
