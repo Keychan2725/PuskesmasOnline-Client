@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function SidebarSuperAdmin() {
   const navigate = useNavigate();
-  const id = localStorage.getItem("id");
+  const id = localStorage.getItem("userId");
   const AuthToken = localStorage.getItem("token");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -20,29 +20,29 @@ export default function SidebarSuperAdmin() {
   const [imgUser, setImgUser] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // const getAkun = async () => {
-  //   try {
-  //     const token = await AuthToken;
-  //     const res = await axios.get(`http://localhost:8080/api/user/${id}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       withCredentials: true,
-  //     });
-  //     const dataUser = res.data;
-  //     setEmail(dataUser.data.email);
-  //     setPassword(dataUser.data.password);
-  //     setUsername(dataUser.data.username);
-  //     setUsia(dataUser.data.usia);
-  //     setImgUser(dataUser.data.imgUser);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     Swal.fire({
-  //       icon: "warning",
-  //       text: "Gagal Mengambil Data",
-  //     });
-  //   }
-  // };
+  const getAkun = async () => {
+    try {
+      const token = await AuthToken;
+      const res = await axios.get(`http://localhost:8080/api/user/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
+      const dataUser = res.data;
+      setEmail(dataUser.data.email);
+      setPassword(dataUser.data.password);
+      setUsername(dataUser.data.username);
+      setUsia(dataUser.data.usia);
+      setImgUser(dataUser.data.imgUser);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      Swal.fire({
+        icon: "warning",
+        text: "Gagal Mengambil Data",
+      });
+    }
+  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -64,9 +64,9 @@ export default function SidebarSuperAdmin() {
       }
     });
   };
-  // useEffect(() => {
-  //   getAkun();
-  // }, []);
+  useEffect(() => {
+    getAkun();
+  }, []);
 
   const handleNavigation = (to) => {
     setLoading(true);

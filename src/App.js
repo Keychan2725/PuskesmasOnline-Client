@@ -22,6 +22,7 @@ import PrivateNomerAntrian from "./router/PrivateNomerAntrian.js";
 import PrivateAdmin from "./router/PrivateAdmin.js";
 import DashboardAdmin from "./pages/admin/Dashboard.js";
 import SetingAntrian from "./pages/admin/SetingAntrian.js";
+import HistoryAntrian from "./pages/admin/HistoryAntrian.js";
 
 function App() {
   useEffect(() => {
@@ -57,9 +58,17 @@ function App() {
           <Route
             path="/nomer-antrian"
             element={
-              <PrivateNomerAntrian>
+              <PrivateRoute>
                 <Antrian />
-              </PrivateNomerAntrian>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/history-antrian"
+            element={
+              <PrivateAdmin>
+                <HistoryAntrian />
+              </PrivateAdmin>
             }
           />
           <Route
@@ -89,20 +98,19 @@ function App() {
           <Route
             path="/dashboard-admin"
             element={
-            <PrivateAdmin>
-              <DashboardAdmin/>
-            </PrivateAdmin>
+              <PrivateAdmin>
+                <DashboardAdmin />
+              </PrivateAdmin>
             }
           />
           <Route
             path="/seting-antrian"
             element={
-            <PrivateAdmin>
-              <SetingAntrian/>
-            </PrivateAdmin>
+              <PrivateAdmin>
+                <SetingAntrian />
+              </PrivateAdmin>
             }
           />
-
         </Routes>
       </BrowserRouter>
     </div>

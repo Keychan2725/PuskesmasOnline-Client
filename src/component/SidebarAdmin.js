@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function SidebarAdmin() {
   const navigate = useNavigate();
-  const id = localStorage.getItem("id");
+  const id = localStorage.getItem("userId");
   const AuthToken = localStorage.getItem("token");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -20,30 +20,33 @@ export default function SidebarAdmin() {
   const [imgUser, setImgUser] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // const getAkun = async () => {
-  //   try {
-  //     const token = await AuthToken;
-  //     const res = await axios.get(`http://localhost:8080/api/user/${id}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       withCredentials: true,
-  //     });
-  //     const dataUser = res.data;
-  //     setEmail(dataUser.data.email);
-  //     setPassword(dataUser.data.password);
-  //     setUsername(dataUser.data.username);
-  //     setUsia(dataUser.data.usia);
-  //     setImgUser(dataUser.data.imgUser);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     Swal.fire({
-  //       icon: "warning",
-  //       text: "Gagal Mengambil Data",
-  //     });
-  //   }
-  // };
+  const getAkun = async () => {
+    try {
+      const token = await AuthToken;
+      const res = await axios.get(`http://localhost:8080/api/user/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
+      const dataUser = res.data;
+      setEmail(dataUser.data.email);
+      setPassword(dataUser.data.password);
+      setUsername(dataUser.data.username);
+      setUsia(dataUser.data.usia);
+      setImgUser(dataUser.data.imgUser);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      Swal.fire({
+        icon: "warning",
+        text: "Gagal Mengambil Data",
+      });
+    }
+  };
 
+  useEffect(() => {
+    getAkun();
+  });
   const handleLogout = () => {
     localStorage.clear();
     // Navigasi ke halaman home setelah logout
@@ -64,9 +67,6 @@ export default function SidebarAdmin() {
       }
     });
   };
-  // useEffect(() => {
-  //   getAkun();
-  // }, []);
 
   const handleNavigation = (to) => {
     setLoading(true);
@@ -225,7 +225,7 @@ export default function SidebarAdmin() {
           <ul className="space-y-2 font-medium">
             <li>
               <a
-                onClick={() => handleNavigation("/dashboard")}
+                onClick={() => handleNavigation("/dashboard-admin")}
                 className="flex items-center p-2 text-gray-100 rounded-lg  hover:bg-gray-800 hover:text-white group"
               >
                 <svg
@@ -262,14 +262,39 @@ export default function SidebarAdmin() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M18.5 12A2.5 2.5 0 0 1 21 9.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v2.5a2.5 2.5 0 0 1 0 5V17a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2.5a2.5 2.5 0 0 1-2.5-2.5Z"
                   />
                 </svg>
 
                 <span className="ms-3">Seting Antrian</span>
+              </a>
+            </li>
+            <li>
+              <a
+                onClick={() => handleNavigation("/history-antrian")}
+                className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 12v1h4v-1m4 7H6a1 1 0 0 1-1-1V9h14v9a1 1 0 0 1-1 1ZM4 5h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"
+                  />
+                </svg>
+
+                <span className="ms-3">History Antrian</span>
               </a>
             </li>
             <li>
@@ -288,9 +313,9 @@ export default function SidebarAdmin() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M9.5 11H5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h4.5M7 11V7a3 3 0 0 1 6 0v1.5m2.5 5.5v1.5l1 1m3.5-1a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z"
                   />
                 </svg>
