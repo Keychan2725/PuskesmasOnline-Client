@@ -85,6 +85,7 @@ export default function RegisterAdmin() {
                   id="username"
                   name="username"
                   type="text"
+                  required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   autoComplete="email"
@@ -103,6 +104,7 @@ export default function RegisterAdmin() {
                 <input
                   id="email"
                   name="email"
+                  required
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -126,6 +128,7 @@ export default function RegisterAdmin() {
                 <input
                   id="password"
                   name="password"
+                  required
                   type={passwordType === "password" ? "password" : "text"}
                   autoComplete="current-password"
                   value={password}

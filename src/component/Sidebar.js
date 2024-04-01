@@ -69,7 +69,6 @@ export default function Sidebar() {
     getAkun();
   }, []);
 
-
   const handleNavigation = (to) => {
     setLoading(true);
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -274,6 +273,31 @@ export default function Sidebar() {
                   </svg>
 
                   <span className="ms-3">Nomer Antrian</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  onClick={() => handleNavigation("/history-antrian-user")}
+                  className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
+                >
+                  <svg
+                    className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 12v1h4v-1m4 7H6a1 1 0 0 1-1-1V9h14v9a1 1 0 0 1-1 1ZM4 5h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"
+                    />
+                  </svg>
+
+                  <span className="ms-3">History Antrian</span>
                 </a>
               </li>
               <li>

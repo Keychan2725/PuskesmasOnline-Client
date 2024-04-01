@@ -23,6 +23,9 @@ import PrivateAdmin from "./router/PrivateAdmin.js";
 import DashboardAdmin from "./pages/admin/Dashboard.js";
 import SetingAntrian from "./pages/admin/SetingAntrian.js";
 import HistoryAntrian from "./pages/admin/HistoryAntrian.js";
+import PrivateOtpAdmin from "./router/PrivateOtpAdmin.js";
+import PrivateOtpUser from "./router/PrivateOtpUser.js";
+import HistoryAntrianUser from "./pages/user/HistoryAntrianUser.js";
 
 function App() {
   useEffect(() => {
@@ -35,8 +38,22 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/sidebar-admin" element={<SidebarAdmin />} />
           <Route path="/sidebar-super-admin" element={<SidebarSuperAdmin />} />
-          <Route path="/register-user" element={<RegisterUser />} />
-          <Route path="/register-admin" element={<RegisterAdmin />} />
+          <Route
+            path="/register-user"
+            element={
+              <PrivateOtpUser>
+                <RegisterUser />
+              </PrivateOtpUser>
+            }
+          />
+          <Route
+            path="/register-admin"
+            element={
+              <PrivateOtpAdmin>
+                <RegisterAdmin />
+              </PrivateOtpAdmin>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/sidebar" element={<Sidebarr />} />
           <Route
@@ -54,7 +71,7 @@ function App() {
                 <Otp />
               </PrivateRegAdmin>
             }
-          />{" "}
+          />
           <Route
             path="/nomer-antrian"
             element={
@@ -72,15 +89,15 @@ function App() {
             }
           />
           <Route
-            path="/detail-nomer-antrian/:idAntrian"
+            path="/detail-nomer-antrian/:id"
             element={
-              <PrivateNomerAntrian>
+              <PrivateRoute>
                 <DetailNomerAntrian />
-              </PrivateNomerAntrian>
+              </PrivateRoute>
             }
           />
           <Route
-            path="/ambil-antrian/:klinikId"
+            path="/ambil-antrian/:id"
             element={
               <PrivateRoute>
                 <AmbilAntrian />
@@ -92,6 +109,14 @@ function App() {
             element={
               <PrivateRoute>
                 <DashboardUser />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/history-antrian-user"
+            element={
+              <PrivateRoute>
+                <HistoryAntrianUser />
               </PrivateRoute>
             }
           />

@@ -84,6 +84,7 @@ export default function RegisterUser() {
                 <input
                   id="username"
                   name="username"
+                  required
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -103,6 +104,7 @@ export default function RegisterUser() {
                 <input
                   id="email"
                   name="email"
+                  required
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -125,6 +127,7 @@ export default function RegisterUser() {
                 <input
                   id="password"
                   name="password"
+                  required
                   type={passwordType === "password" ? "password" : "text"}
                   autoComplete="current-password"
                   value={password}

@@ -29,6 +29,7 @@ export default function Antrian() {
 
     delay(1000)
       .then(() => {
+        localStorage.setItem("klinikId" , klinikList.klinikId)
         window.location.href = to;
       })
       .finally(() => {
@@ -45,7 +46,7 @@ export default function Antrian() {
             {klinikList.map((klinik) => (
               <a
                 onClick={() =>
-                  handleNavigation(`/ambil-antrian/${klinik.klinikId}`)
+                  handleNavigation(`/ambil-antrian/${klinik.id}`)
                 }
                 className="text-decoration-none bg-white rounded-lg shadow-md overflow-hidden"
               >
