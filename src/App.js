@@ -26,6 +26,7 @@ import HistoryAntrian from "./pages/admin/HistoryAntrian.js";
 import PrivateOtpAdmin from "./router/PrivateOtpAdmin.js";
 import PrivateOtpUser from "./router/PrivateOtpUser.js";
 import HistoryAntrianUser from "./pages/user/HistoryAntrianUser.js";
+import PublikKlinik from "./pages/PublikKlinik.js";
 
 function App() {
   useEffect(() => {
@@ -55,6 +56,7 @@ function App() {
             }
           />
           <Route path="/login" element={<Login />} />
+          <Route path="/publik-klinik/:id" element={<PublikKlinik />} />
           <Route path="/sidebar" element={<Sidebarr />} />
           <Route
             path="/otp-user"

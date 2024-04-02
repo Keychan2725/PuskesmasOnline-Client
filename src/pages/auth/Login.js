@@ -34,10 +34,9 @@ export default function Login() {
             window.location.href = "/dashboard-admin";
           } else {
             Swal.fire({
-              icon: "success",
-              title: "Berhasil masuk",
+              icon: "error",
+              title: "Anda Belum Terdaftar Sebagai Admin",
             });
-            window.location.href = "/dashboard-admin";
           }
         } else if (data.data.data.role === "user") {
           localStorage.setItem("token", data.data.token);

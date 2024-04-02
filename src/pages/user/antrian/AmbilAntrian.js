@@ -10,13 +10,12 @@ import Swal from "sweetalert2";
 export default function AmbilAntrian() {
   const deviceMode = useMediaQuery({ query: "(max-width: 767px)" });
   const dekstopMode = useMediaQuery({ query: "(min-width: 768px)" });
-  const [openAntrian, setOpenAntrian] = useState(false);
+  const [openAntrian, setOpenAntrian] = useState(true);
   const [loading, setLoading] = useState(false);
   const [antrian, setAntrian] = useState("");
   const { id } = useParams();
   const [noAntrian, setNoAntrian] = useState("");
   const userId = localStorage.getItem("userId");
-  console.log(id);
 
   const getDataAntrian = async () => {
     try {
@@ -30,38 +29,70 @@ export default function AmbilAntrian() {
     }
   };
 
+  const userRequestTimestamps = new Map();
+
   const ambilTiket = async () => {
     try {
       const newAntrian = parseInt(antrian.noAntrian) - 1;
-      const response = await axios.put(
-        `http://localhost:8080/api/admin/klinikpagi/ambilantrian/${id}`,
-        {
-          namaKlinik: antrian.namaKlinik,
-          noAntrian: newAntrian,
-          alamat: antrian.alamat,
-          status: "Buka",
-          statusKlinik: antrian.statusKlinik,
-          tanggalWaktu: antrian.tanggalWaktu,
-          klinikId: antrian.klinikId,
-        }
-      );
-      const Response = await axios.post(
-        `http://localhost:8080/api/antrian/add`,
-        {
-          idKlinik: antrian.klinikId,
-          idKlinikPagi: antrian.id,
-          userId: localStorage.getItem("userId"),
-          status: "Sukses",
-        }
-      );
+      const idUser = localStorage.getItem("userId");
 
-      setAntrian(response.data);
-      toast.success("Antrian berhasil diambil");
+      const lastAntrianTime = userRequestTimestamps.get(idUser);
+
+      const currentTime = new Date().getTime();
+
+      const timeDifference = lastAntrianTime
+        ? currentTime - lastAntrianTime.getTime()
+        : Infinity;
+
+      const fifteenHoursInMilliseconds = 15 * 60 * 60 * 1000;
+
+      if (timeDifference < fifteenHoursInMilliseconds) {
+        toast.error("Anda sudah mengambil antrian untuk hari ini");
+        return;
+      }
+
+      const [klinikPagiResponse, antrianResponse] = await Promise.all([
+        axios.put(
+          `http://localhost:8080/api/admin/klinikpagi/ambilantrian/${id}?idUser=${idUser}`,
+          {
+            noAntrian: newAntrian,
+            alamat: antrian.alamat,
+            statusKlinik: antrian.statusKlinik,
+            tanggalWaktu: antrian.tanggalWaktu,
+            klinikId: antrian.klinikId,
+          }
+        ),
+      ]);
+
+      if (klinikPagiResponse.status === 200 && antrianResponse.status === 200) {
+        userRequestTimestamps.set(idUser, new Date());
+
+        setAntrian(klinikPagiResponse.data);
+        setOpenAntrian(false);
+        Swal.fire({
+          title: "Sukses",
+          text: "berhasil mengambil antrian",
+          icon: "success",
+        });
+      } else {
+        setOpenAntrian(true);
+        Swal.fire({
+          title: "Gagal",
+          text: "gagal mengambil antrian",
+          icon: "error",
+        });
+      }
     } catch (error) {
-      console.log(error);
-      toast.error("Gagal mengambil antrian");
+      console.error("Error:", error.message);
+      setOpenAntrian(true);
+      Swal.fire({
+        title: "Gagal",
+        text: "gagal mengambil antrian",
+        icon: "error",
+      });
     }
   };
+
   const handleNavigation = (to) => {
     setLoading(true);
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -155,7 +186,7 @@ export default function AmbilAntrian() {
                   )}
                 </div>
               </div>
-              {!openAntrian && (
+              {openAntrian && (
                 <>
                   <div className="float-end">
                     <button
@@ -182,7 +213,7 @@ export default function AmbilAntrian() {
                 </>
               )}
 
-              {openAntrian && (
+              {!openAntrian && (
                 <>
                   <center>
                     <div
@@ -203,14 +234,11 @@ export default function AmbilAntrian() {
                       <div className="float-end px-5 pt-4">
                         <button
                           onClick={() =>
-                            handleNavigation(
-                              `/detail-nomer-antrian/${antrian.id}`
-                            )
+                            handleNavigation(`/history-antrian-user`)
                           }
                           className="bg-sky-600 w-16 h-8 rounded-xl text-white"
-                          href=""
                         >
-                          Detail
+                          History
                         </button>
                       </div>
                     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Logo from "../asset/logo.png";
 import Swal from "sweetalert2";
@@ -8,12 +8,15 @@ import { Button, Modal } from "flowbite-react";
 import { FaRegRegistered } from "react-icons/fa6";
 import { HiOutlineX } from "react-icons/hi";
 
-const api = "http://localhost:8080/api/admin/all";
+const api = "http://localhost:8080/api/admin/dataklinik/all";
 export default function LandingPage() {
   const [getKlinik, setGetklinik] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [openModal, setOpenModal] = useState(false);
+
+  const searchInputRef = useRef();
+  const klinikListRef = useRef();
 
   const klinik = async () => {
     try {
@@ -25,44 +28,27 @@ export default function LandingPage() {
     }
   };
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value.toLowerCase());
-
-    if (e.target.value) {
-      const matchingKliniks = getKlinik.filter((klinik) => {
-        if (klinik.namaKlinik) {
-          return klinik.namaKlinik
-            .toUpperCase()
-            .includes(e.target.value.toUpperCase());
-        }
-        return false;
-      });
-
-      setSearchResults(matchingKliniks);
+  const handleSubmit = (selectedKlinik) => {
+    if (selectedKlinik) {
+      const klinikId = selectedKlinik.id;
+      window.location.href = `/publik-klinik/${klinikId}`;
     } else {
-      setSearchResults([]);
+      Swal.fire({
+        icon: "warning",
+        text: "Klinik Tidak Ditemukan",
+      });
     }
   };
 
-  const handleSubmit = (selectedKlinik) => {
-    if (selectedKlinik) {
-      window.location.href = `/publik-klinik/${selectedKlinik.id}`;
-    } else {
-      const searchTerm = searchQuery;
-      const matchingKliniks = getKlinik.filter((klinik) =>
-        klinik.namaKlinik.toLowerCase().includes(searchTerm)
-      );
-
-      if (matchingKliniks.length) {
-        const matchingKlinik = matchingKliniks[0];
-        window.location.href = `/publik-klinik/${matchingKlinik.id}`;
-      } else {
-        Swal.fire({
-          icon: "warning",
-          text: "Klinik Tidak Ditemukan",
-        });
-      }
-    }
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    setSearchQuery(searchTerm);
+    const matchingKlinik = getKlinik.filter(
+      (klinik) =>
+        klinik.namaKlinik &&
+        klinik.namaKlinik.toLowerCase().startsWith(searchTerm)
+    );
+    setSearchResults(matchingKlinik);
   };
 
   useEffect(() => {
@@ -93,13 +79,12 @@ export default function LandingPage() {
                 >
                   Masuk
                 </a>
-                <button
-                  type="button"
+                <a
+                  href="/register-user"
                   className="text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-gray-900 dark:hover:bg-gray-300 focus:outline-none dark:focus:ring-gray-500"
-                  onClick={() => setOpenModal(true)}
                 >
                   Registrasi
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -116,29 +101,44 @@ export default function LandingPage() {
               Kami Peduli Dengan Kesehatan Anda
             </p>
 
-            <div className="w-75 pt-4 flex flex-column items-center">
+            <div className="w-75 pt-4 flex-row items-center relative">
               <div className="mr-4 flex-grow">
                 <input
-                  id="searchklinik"
+                  id="searchKlinik"
                   type="text"
-                  className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-dark"
-                  placeholder="Cari Layanan"
+                  className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg   block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Cari klinik"
+                  ref={searchInputRef}
                   onChange={handleSearch}
-                  value={searchQuery}
                 />
-
-                {searchResults.length > 0 && (
-                  <ul className="list-unstyled z-100 absolute top-full w-full left-0 bg-white border border-gray-300 rounded shadow-lg">
-                    {searchResults.map((klinik) => (
-                      <li
-                        key={klinik.id}
-                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleSubmit(klinik)}
+              </div>
+              <div
+                id="klinikList"
+                className={`text-gray-950 dark:text-gray-950 p-1 absolute left-0 top-full w-full bg-white border border-gray-300 rounded-lg shadow-lg z-10 ${
+                  searchQuery.length === 0 ? "hidden" : ""
+                }`}
+                ref={klinikListRef}
+                style={{ maxHeight: "200px", overflowY: "auto" }}
+              >
+                {searchQuery.length > 0 && (
+                  <>
+                    {searchResults.length === 0 && (
+                      <div className="p-2">Klinik Tidak Ditemukan</div>
+                    )}
+                    {searchResults.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        className={`list-item text-start ${
+                          searchInputRef.current === document.activeElement
+                            ? "active"
+                            : ""
+                        }`}
+                        onClick={() => handleSubmit(suggestion)}
                       >
-                        {klinik.namaKlinik}
-                      </li>
+                        {suggestion.namaKlinik}
+                      </div>
                     ))}
-                  </ul>
+                  </>
                 )}
               </div>
             </div>

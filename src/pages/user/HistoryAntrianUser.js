@@ -6,29 +6,70 @@ import { Link } from "react-router-dom";
 import Sidebar from "../../component/Sidebar";
 
 export default function HistoryAntrianUser() {
-  const klinikId = localStorage.getItem("userId");
-  const [history, setHistory] = useState("");
-  const userId = localStorage.getItem("userId");
-
+  const idUser = localStorage.getItem("userId");
+  const [history, setHistory] = useState([]);
+  const [namaklinik, setNamaklinik] = useState([]);
   const getHistory = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/admin/klinikpagi/${klinikId}?idUser=${userId}`
+        `http://localhost:8080/api/antrian/all/${idUser}`
       );
       setHistory(response.data);
     } catch (error) {
       console.log(error);
       Swal.fire({
-        title: "Gagal Mengambil History",
-        icon: "error",
-        text: "erorr : " + error,
+        text: "Anda Belum Memiliki History Antrian ",
+        icon: "warning",
       });
     }
   };
 
+  const Delete = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "Anda yakin ingin menghapus data ini?",
+        text: "Data yang dihapus tidak dapat dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, hapus!",
+        cancelButtonText: "Batal",
+      });
+
+      if (result.isConfirmed) {
+        const response = await axios.delete(
+          `http://localhost:8080/api/antrian/delete/${id}`
+        );
+        Swal.fire("Data Terhapus!", "Data berhasil dihapus.", "success");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire("Error!", "Terjadi kesalahan saat menghapus data.", "error");
+    }
+  };
+  // const getKlinikList = async () => {
+  //   try {
+  //     console.log(id);
+  //     const response = await axios.get(
+  //       `http://localhost:8080/api/admin/dataklinik/${id}`
+  //     );
+  //     setNamaklinik(response.data.namaklinik);
+  //   } catch (error) {
+  //     console.log(error);
+  //     Swal.fire({
+  //       title: "Gagal Mengambil Daftar Klinik",
+  //       icon: "error",
+  //       text: "gagal mengambil data ",
+  //     });
+  //   }
+  // };
+
   useEffect(() => {
     getHistory();
+    // getKlinikList();
   }, []);
+
   return (
     <>
       <Sidebar />
@@ -66,7 +107,7 @@ export default function HistoryAntrianUser() {
                       No
                     </th>
                     <th className="whitespace-nowrap px-4 py-2 text-center font-medium">
-                      Jumlah Antrian
+                      No Antrian
                     </th>
 
                     <th className="whitespace-nowrap px-4 py-2 text-center font-medium">
@@ -76,79 +117,82 @@ export default function HistoryAntrianUser() {
                       Status
                     </th>
                     <th className="whitespace-nowrap px-4 py-2 text-center font-medium">
+                      Tanggal
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-2 text-center font-medium">
                       Aksi
                     </th>
                   </tr>
                 </thead>
                 <tbody className="text-center">
-                  {Array.isArray(history) &&
-                    history.map((val, idx) => (
-                      <tr key={idx}>
-                        <td className="border-blue-300 left-0 py-2">
-                          {idx + 1}
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                          {val.noAntrian}
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                          {val.namaKlinik}
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                          {val.status}
-                        </td>
-                        <td className="whitespace-nowrap text-ceter py-2">
-                          <div className="flex items-center -space-x-4 hover:space-x-1">
-                            <a href={"/detail-guru/" + val.id}>
-                              <button
-                                className="z-20 block rounded-full border-2 border-white bg-blue-100 p-4 text-blue-700 transition-all hover:scale-110 focus:outline-none focus:ring active:bg-blue-50"
-                                type="button"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                  className="h-6 w-6"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                  />
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M2 12s3 7.5 10 7.5 10-7.5 10-7.5-3-7.5-10-7.5S2 12 2 12z"
-                                  />
-                                </svg>
-                              </button>
-                            </a>
+                  {history.map((val, idx) => (
+                    <tr key={idx}>
+                      <td className="border-blue-300 left-0 py-2">{idx + 1}</td>
+                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                        {val.noAntrian}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                        {val.idKlinik}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                        {val.status}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                        {val.tanggalWaktu}
+                      </td>
+                      <td className="whitespace-nowrap text-ceter py-2">
+                        <div className="flex items-center -space-x-4 hover:space-x-1">
+                          <Link to={"/detail-nomer-antrian/" + val.id}>
                             <button
-                              className="z-30 block rounded-full border-2 border-white bg-red-100 p-4 text-red-700 transition-all hover:scale-110 focus:outline-none focus:ring active:bg-red-50"
+                              className="z-20 block rounded-full border-2 border-white bg-blue-100 p-4 text-blue-700 transition-all hover:scale-110 focus:outline-none focus:ring active:bg-blue-50"
                               type="button"
-                              //   onClick={() => deleteHistory(val.id)}
                             >
                               <svg
-                                className="h-4 w-4"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
+                                className="h-6 w-6"
                               >
                                 <path
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
                                   strokeWidth="2"
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M2 12s3 7.5 10 7.5 10-7.5 10-7.5-3-7.5-10-7.5S2 12 2 12z"
                                 />
                               </svg>
                             </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                          </Link>
+                          <button
+                            className="z-30 block rounded-full border-2 border-white bg-red-100 p-4 text-red-700 transition-all hover:scale-110 focus:outline-none focus:ring active:bg-red-50"
+                            type="button"
+                            onClick={() => Delete(val.id)}
+                          >
+                            <svg
+                              className="h-4 w-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
