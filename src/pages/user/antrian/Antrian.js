@@ -29,7 +29,7 @@ export default function Antrian() {
 
     delay(1000)
       .then(() => {
-        localStorage.setItem("klinikId" , klinikList.klinikId)
+        localStorage.setItem("klinikId", klinikList.klinikId);
         window.location.href = to;
       })
       .finally(() => {
@@ -41,13 +41,11 @@ export default function Antrian() {
       {loading && <IconLoader />}
       <Sidebar />
       <div className="flex justify-center w-[100%] mt-20">
-        <section className="s-content w-[390px] md:w-[1125px] px-5 md:px-10  py-5 ">
+        <section className="s-content w-[390px] md:w-[1125px] px-5 md:px-10  py-5 lg:pl-28">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {klinikList.map((klinik) => (
               <a
-                onClick={() =>
-                  handleNavigation(`/ambil-antrian/${klinik.id}`)
-                }
+                onClick={() => handleNavigation(`/ambil-antrian/${klinik.id}`)}
                 className="text-decoration-none bg-white rounded-lg shadow-md overflow-hidden"
               >
                 <div className="px-6 py-4">

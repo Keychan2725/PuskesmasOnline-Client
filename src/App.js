@@ -27,6 +27,10 @@ import PrivateOtpAdmin from "./router/PrivateOtpAdmin.js";
 import PrivateOtpUser from "./router/PrivateOtpUser.js";
 import HistoryAntrianUser from "./pages/user/HistoryAntrianUser.js";
 import PublikKlinik from "./pages/PublikKlinik.js";
+import ReservasiOperasiUser from "./pages/user/reservasi_operasi/ReservasiOperasiUser.js";
+import Akun from "./pages/user/profile/Akun.js";
+import ReservasiOperasiAdmin from "./pages/admin/ReservasiOperasiAdmin.js";
+import AkunAdmin from "./pages/admin/profile/AkunAdmin.js";
 
 function App() {
   useEffect(() => {
@@ -83,10 +87,42 @@ function App() {
             }
           />
           <Route
+            path="/akun"
+            element={
+              <PrivateRoute>
+                <Akun />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/reservasi-operasi-user"
+            element={
+              <PrivateRoute>
+                <ReservasiOperasiUser />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/history-antrian"
             element={
               <PrivateAdmin>
                 <HistoryAntrian />
+              </PrivateAdmin>
+            }
+          />
+          <Route
+            path="/reservasi-operasi-admin"
+            element={
+              <PrivateAdmin>
+                <ReservasiOperasiAdmin />
+              </PrivateAdmin>
+            }
+          />
+          <Route
+            path="/akun-admin"
+            element={
+              <PrivateAdmin>
+                <AkunAdmin />
               </PrivateAdmin>
             }
           />

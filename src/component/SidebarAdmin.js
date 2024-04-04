@@ -325,7 +325,7 @@ export default function SidebarAdmin() {
             </li>
             <li>
               <a
-                onClick={() => handleNavigation("/akun")}
+                onClick={() => handleNavigation("/akun-admin")}
                 className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
               >
                 <svg

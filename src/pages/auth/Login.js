@@ -34,9 +34,10 @@ export default function Login() {
             window.location.href = "/dashboard-admin";
           } else {
             Swal.fire({
-              icon: "error",
-              title: "Anda Belum Terdaftar Sebagai Admin",
+              icon: "success",
+              title: "Berhasil masuk",
             });
+            window.location.href = "/dashboard-admin";
           }
         } else if (data.data.data.role === "user") {
           localStorage.setItem("token", data.data.token);
@@ -199,17 +200,10 @@ export default function Login() {
           <p className="mt-10 text-center text-sm text-gray-500">
             Belum Punya Akun?
             <a
-              href="/register-admin"
-              className="mx-2 font-semibold leading-6 text-rose-600 hover:text-indigo-500"
-            >
-              admin
-            </a>
-            or
-            <a
               href="/register-user"
               className="mx-2 font-semibold leading-6 text-rose-600 hover:text-indigo-500"
             >
-              user
+              Register
             </a>
           </p>
         </div>

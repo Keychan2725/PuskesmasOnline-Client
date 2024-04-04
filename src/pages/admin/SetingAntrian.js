@@ -44,7 +44,7 @@ export default function SetingAntrian() {
       <SidebarAdmin />
       <div className="flex justify-center w-[100%] mt-20">
         <section className="s-content w-[390px] md:w-[1125px] px-5 md:px-10  py-5 lg:pl-28">
-          <div className="bg-white rounded-lg w-full min-h-96">
+          <div className="bg-white rounded-lg w-full min-h-96 md:h-auto">
             <form
               className="mt-5 mb-0 space-y-4 rounded-lg p-8 "
               onSubmit={TambahAntrian}
@@ -60,6 +60,7 @@ export default function SetingAntrian() {
                   </label>
                   <input
                     type="number"
+                    required
                     id="jumlahantrian"
                     onChange={(e) => setJumlahNoAntrian(e.target.value)}
                     value={noAntrian}
@@ -73,6 +74,7 @@ export default function SetingAntrian() {
                   </label>
                   <input
                     type="text"
+                    required
                     id="namaKlinik"
                     onChange={(e) => setNamaKlinik(e.target.value)}
                     value={namaKlinik}
@@ -90,9 +92,9 @@ export default function SetingAntrian() {
                   id="alamat"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                   placeholder="Masukan Alamat Klinik"
+                  required
                   value={alamat}
                   onChange={(e) => setAlamat(e.target.value)}
-                  required
                 />
               </div>
 
@@ -106,6 +108,7 @@ export default function SetingAntrian() {
                     className="group peer hidden"
                     type="radio"
                     name="shippingOption"
+                    required
                     value="Negeri"
                     onChange={(e) => setStatusKlinik(e.target.value)}
                     id="Negeri"
@@ -138,6 +141,7 @@ export default function SetingAntrian() {
                     className="group peer hidden"
                     type="radio"
                     name="shippingOption"
+                    required
                     value="Swasta"
                     onChange={(e) => setStatusKlinik(e.target.value)}
                     id="Swasta"
@@ -165,13 +169,7 @@ export default function SetingAntrian() {
                 </div>
               </div>
 
-              <div className="flex justify-between pt-5">
-                <button
-                  type="button"
-                  className="block w-24 rounded-lg text-black outline outline-red-500 py-3 text-sm font-medium"
-                >
-                  Batal
-                </button>
+              <div className="flex justify-end pt-5">
                 <button
                   type="submit"
                   className="block w-24 rounded-lg text-black outline outline-[#0b409c] py-3 text-sm font-medium"

@@ -228,7 +228,7 @@ export default function Sidebar() {
             <ul className="space-y-2 font-medium">
               <li>
                 <a
-                  onClick={() => handleNavigation("/sidebar")}
+                  onClick={() => handleNavigation("/dashboard-user")}
                   className="flex items-center p-2 text-gray-100 rounded-lg  hover:bg-gray-800 hover:text-white group"
                 >
                   <svg
@@ -302,7 +302,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <a
-                  onClick={() => handleNavigation("/reservasi-operasi")}
+                  onClick={() => handleNavigation("/reservasi-operasi-user")}
                   className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
                 >
                   <svg
