@@ -81,13 +81,7 @@ export default function HistoryAntrian() {
       confirmButtonText: "Ya , Unduh",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios({
-          // url:
-          //   "http://localhost:8080/api/excel-guru/download-guru/" +
-          //   localStorage.getItem("sekolahId"),
-          method: "GET",
-          responseType: "blob",
-        }).then((response) => {
+        axios(`http:///localhost:8080/api/download/excel`).then((response) => {
           var fileURL = window.URL.createObjectURL(new Blob([response.data]));
           var fileLink = document.createElement("a");
 
