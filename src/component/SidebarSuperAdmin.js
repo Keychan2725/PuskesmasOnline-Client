@@ -81,14 +81,17 @@ export default function SidebarSuperAdmin() {
       });
   };
 
-  const Icon = ({ icon }) => (
-    <div
-      dangerouslySetInnerHTML={{
-        __html: icon,
-      }}
-      className="w-5 h-5 text-gray-500 mr-2"
-    />
-  );
+  const reloadPage = () => {
+    setLoading(true);
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    delay(1000)
+      .then(() => {
+        window.location.reload();
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   return (
     <>
       {loading && <IconLoader />}
@@ -119,40 +122,36 @@ export default function SidebarSuperAdmin() {
                   ></path>
                 </svg>
               </button>
-              <a href="#" className="flex ms-2 md:me-16">
+              <button onClick={() => reloadPage()} className="flex ms-2 md:me-16">
                 <img src={Logo} className="h-12 me-3" alt="FlowBite Logo" />
                 <span className="   self-center text-xl text-white font-semibold sm:text-2xl whitespace-nowrap  ">
                   PUSLINE
                 </span>
-              </a>
+              </button>
             </div>
 
             <div className="flex items-center">
-              <button
+            <button
                 type="button"
-                className="ml-4 flex items-center text-sm bg-gray-100 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-500"
-                aria-expanded="false"
                 data-dropdown-toggle="dropdown-notification"
+                className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
               >
-                <Icon
-                  icon={`<svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        className="w-5 h-5 text-gray-500 transition duration-75 hover:text-white dark:text-gray-400 group-hover:text-white dark:group-hover:text-white"
-        >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .828-.343 1.671-.909 2.234-.54.568-.885.976-1.234 1.414m18.4842.206A14.977 14.977 0 0010.44 10.44 15 15 0 1121.88 15.88A15 15 0 0110.44 10.44z
-        "
-      ></path>
-      </svg>
-    `}
-                />
-                <span className="sr-only">View notifications</span>
+                <span class="absolute -inset-1.5"></span>
+                <span class="sr-only">View notifications</span>
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  ariaHidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
+                  />
+                </svg>
               </button>
               <div
                 id="dropdown-notification"
