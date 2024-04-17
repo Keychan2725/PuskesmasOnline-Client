@@ -4,9 +4,7 @@ import Logo from "../asset/logo.png";
 import Swal from "sweetalert2";
 import Gambar from "../asset/2.jpg";
 import "./landingpage.css";
-import { Button, Modal } from "flowbite-react";
-import { FaRegRegistered } from "react-icons/fa6";
-import { HiOutlineX } from "react-icons/hi";
+import emailjs from "@emailjs/browser";
 
 const api = "http://localhost:8080/api/admin/dataklinik/all";
 export default function LandingPage() {
@@ -14,6 +12,7 @@ export default function LandingPage() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [openModal, setOpenModal] = useState(false);
+  const form = useRef();
 
   const searchInputRef = useRef();
   const klinikListRef = useRef();
@@ -54,6 +53,117 @@ export default function LandingPage() {
   useEffect(() => {
     klinik();
   }, []);
+
+  const Terima = async (id) => {
+    try {
+      await axios.put(`http://localhost:8080/api/users/status/terima/${id}`, {
+        status: "Diterima",
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Menerima users",
+      });
+      window.location.reload();
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.response ? error.response.data.message : "Kesalahan",
+      });
+    }
+  };
+
+  const non_aktif = async (id) => {
+    try {
+      await axios.put(
+        `http://localhost:8080/api/users/status/non-aktif/${id}`,
+        {
+          status: null,
+        }
+      );
+      Swal.fire({
+        icon: "success",
+        title: "Non Aktif users",
+      });
+      window.location.reload();
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.response ? error.response.data.message : "Kesalahan",
+      });
+    }
+  };
+
+  const deleteUser = async (id) => {
+    await Swal.fire({
+      title: "Anda yakin?",
+      text: "Yakin ingin menghapus data users ini? Pastikan sudah memberikan pemberitahuan melalui email",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`http://localhost:8080/api/users/${id}`);
+          await Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Berhasil Menghapus!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          window.location.reload();
+        } catch (error) {
+          console.error(error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Terjadi kesalahan saat menghapus data",
+          });
+        }
+      }
+    });
+  };
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    emailjs
+      .sendForm(
+        "service_ztyk8vk",
+        "template_vcnpzvc",
+        form.current,
+        "-Bw1Ibwk-iGxtih6p"
+      )
+      .then(
+        (result) => {
+          if (result) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Berhasil Dikirim",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            window.location.reload();
+          }
+        },
+        (error) => {
+          if (error) {
+            Swal.fire({
+              position: "center",
+              icon: "warning",
+              title: "Gagal Dikirim",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        }
+      );
+  };
 
   return (
     <>
@@ -268,50 +378,55 @@ export default function LandingPage() {
               <h1 className="max-w-lg text-xl font-semibold tracking-tight text-gray-800 xl:text-2xl dark:text-white">
                 Saran Dan Masukan
               </h1>
+              <form ref={form} onSubmit={sendEmail}>
+                {" "}
+                <div className=" flex flex-col mx-auto mt-6 space-y-3 md:space-y-0 md:flex-row gap-2 my-5">
+                  <div className="sm:grid-cols-1">
+                    <input
+                      id="email"
+                      type="text"
+                      name="from_user"
+                      className="px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-100 focus:border-blue-200 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300"
+                      placeholder="Email "
+                    />
+                  </div>
+                  <div className="sm:grid-cols-1">
+                    <input
+                      id=""
+                      type="text"
+                      name="message"
+                      className="px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-100 focus:border-blue-200 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300"
+                      placeholder="Saran dan Masukan"
+                    />
+                  </div>
 
-              <div className="flex flex-col mx-auto mt-6 space-y-3 md:space-y-0 md:flex-row">
-                <div className="flex justify-content-around-gap2">
-                  <input
-                    id="email"
-                    type="text"
-                    className="px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300"
-                    placeholder="Email Address"
-                  />
-                  <input
-                    id=""
-                    type="text"
-                    className="px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300"
-                    placeholder="Saran dan Masukan"
-                  />
+                  <button className=" bg-rose-500 w-full px-6 py-2.5 text-sm font-medium tracking-wider text-white transition-colors duration-300 transform md:w-auto md:mx-4 focus:outline-none bg-gray-800 rounded-lg hover:bg-gray-700 focus:ring focus:ring-gray-300 focus:ring-opacity-80">
+                    Kirim
+                  </button>
                 </div>
-
-                <button className="bg-rose-500  w-full px-6 py-2.5 text-sm font-medium tracking-wider text-white transition-colors duration-300 transform md:w-auto md:mx-4 focus:outline-none bg-gray-800 rounded-lg hover:bg-gray-700 focus:ring focus:ring-gray-300 focus:ring-opacity-80">
-                  Kirim
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <p className="font-semibold text-gray-800 dark:text-white">
-                Quick Link
-              </p>
-
-              <div className="flex flex-col items-start mt-5 space-y-2">
-                <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
-                  Home
-                </p>
-                <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
-                  Who We Are
-                </p>
-                <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
-                  Our Philosophy
-                </p>
-              </div>
+              </form>
             </div>
 
             <div>
               <p className="font-semibold text-gray-800 dark:text-white">
                 Industries
+              </p>
+
+              <div className="flex flex-col items-start mt-5 space-y-2">
+                <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
+                  Retail & E-Commerce
+                </p>
+                <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
+                  Information Technology
+                </p>
+                <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
+                  Finance & Insurance
+                </p>
+              </div>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-800 dark:text-white">
+                Beri Rating
               </p>
 
               <div className="flex flex-col items-start mt-5 space-y-2">
@@ -372,29 +487,11 @@ export default function LandingPage() {
                 height="30"
                 alt="gt"
               />
-              <img
-                src="https://www.svgrepo.com/show/22037/path.svg"
-                width="30"
-                height="30"
-                alt="pn"
-              />
-              <img
-                src="https://www.svgrepo.com/show/28145/linkedin.svg"
-                width="30"
-                height="30"
-                alt="in"
-              />
-              <img
-                src="https://www.svgrepo.com/show/22048/dribbble.svg"
-                className=""
-                width="30"
-                height="30"
-                alt="db"
-              />
+           
             </div>
           </div>
-          <p className="font-sans p-8 text-start md:text-center md:text-lg md:p-4">
-            © 2023 You Company Inc. All rights reserved.
+          <p className=" text-white font-sans p-8 text-start md:text-center md:text-lg md:p-4">
+            © 2024 Puskesmas Online 
           </p>
         </div>
       </footer>
