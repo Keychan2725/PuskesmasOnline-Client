@@ -136,8 +136,8 @@ export default function SidebarSuperAdmin() {
                 data-dropdown-toggle="dropdown-notification"
                 className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
               >
-                <span class="absolute -inset-1.5"></span>
-                <span class="sr-only">View notifications</span>
+                <span className="absolute -inset-1.5"></span>
+                <span className="sr-only">View notifications</span>
                 <svg
                   className="h-6 w-6"
                   fill="none"
@@ -188,7 +188,7 @@ export default function SidebarSuperAdmin() {
                 </ul>
               </div>
               <a
-                onClick={() => handleNavigation("/akun")}
+                onClick={() => handleNavigation("/akun-super-admin")}
                 className="text-decoration-none"
               >
                 {" "}
@@ -224,7 +224,7 @@ export default function SidebarSuperAdmin() {
           <ul className="space-y-2 font-medium">
             <li>
               <a
-                onClick={() => handleNavigation("/dashboard")}
+                onClick={() => handleNavigation("/dashboard-super-admin")}
                 className="flex items-center p-2 text-gray-100 rounded-lg  hover:bg-gray-800 hover:text-white group"
               >
                 <svg
@@ -273,7 +273,7 @@ export default function SidebarSuperAdmin() {
             </li>
             <li>
               <a
-                onClick={() => handleNavigation("/akun")}
+                onClick={() => handleNavigation("/akun-super-admin")}
                 className="flex items-center p-2 text-gray-100 rounded-lg   hover:bg-gray-800 hover:text-white group"
               >
                 <svg

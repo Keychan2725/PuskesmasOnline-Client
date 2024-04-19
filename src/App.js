@@ -18,9 +18,10 @@ import SidebarSuperAdmin from "./component/SidebarSuperAdmin.js";
 import Antrian from "./pages/user/antrian/Antrian.js";
 import AmbilAntrian from "./pages/user/antrian/AmbilAntrian";
 import DetailNomerAntrian from "./pages/user/antrian/DetailNomerAntrian.js";
-import PrivateNomerAntrian from "./router/PrivateNomerAntrian.js";
-import PrivateAdmin from "./router/PrivateAdmin.js";
+import DashboardSuperAdmin from "./pages/superAdmin/DashboardSuperAdmin.js";
 import DashboardAdmin from "./pages/admin/Dashboard.js";
+import PrivateAdmin from "./router/PrivateAdmin.js";
+import PrivateSuperAdmin from "./router/PrivateSuperAdmin";
 import SetingAntrian from "./pages/admin/SetingAntrian.js";
 import HistoryAntrian from "./pages/admin/HistoryAntrian.js";
 import PrivateOtpAdmin from "./router/PrivateOtpAdmin.js";
@@ -31,6 +32,8 @@ import ReservasiOperasiUser from "./pages/user/reservasi_operasi/ReservasiOperas
 import Akun from "./pages/user/profile/Akun.js";
 import ReservasiOperasiAdmin from "./pages/admin/ReservasiOperasiAdmin.js";
 import AkunAdmin from "./pages/admin/profile/AkunAdmin.js";
+import DaftarKlinik from "./pages/superAdmin/DaftarKlinik.js";
+import AkunSuperAdmin from "./pages/superAdmin/profileSuperAdmin/AkunSuperAdmin.js";
 
 function App() {
   useEffect(() => {
@@ -78,54 +81,7 @@ function App() {
               </PrivateRegAdmin>
             }
           />
-          <Route
-            path="/nomer-antrian"
-            element={
-              <PrivateRoute>
-                <Antrian />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/akun"
-            element={
-              <PrivateRoute>
-                <Akun />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/reservasi-operasi-user"
-            element={
-              <PrivateRoute>
-                <ReservasiOperasiUser />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/history-antrian"
-            element={
-              <PrivateAdmin>
-                <HistoryAntrian />
-              </PrivateAdmin>
-            }
-          />
-          <Route
-            path="/reservasi-operasi-admin"
-            element={
-              <PrivateAdmin>
-                <ReservasiOperasiAdmin />
-              </PrivateAdmin>
-            }
-          />
-          <Route
-            path="/akun-admin"
-            element={
-              <PrivateAdmin>
-                <AkunAdmin />
-              </PrivateAdmin>
-            }
-          />
+          {/* user */}
           <Route
             path="/detail-nomer-antrian/:id"
             element={
@@ -159,6 +115,56 @@ function App() {
             }
           />
           <Route
+            path="/nomer-antrian"
+            element={
+              <PrivateRoute>
+                <Antrian />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/akun"
+            element={
+              <PrivateRoute>
+                <Akun />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/reservasi-operasi-user"
+            element={
+              <PrivateRoute>
+                <ReservasiOperasiUser />
+              </PrivateRoute>
+            }
+          />
+          {/* admin */}
+          <Route
+            path="/history-antrian"
+            element={
+              <PrivateAdmin>
+                <HistoryAntrian />
+              </PrivateAdmin>
+            }
+          />
+          <Route
+            path="/reservasi-operasi-admin"
+            element={
+              <PrivateAdmin>
+                <ReservasiOperasiAdmin />
+              </PrivateAdmin>
+            }
+          />
+          <Route
+            path="/akun-admin"
+            element={
+              <PrivateAdmin>
+                <AkunAdmin />
+              </PrivateAdmin>
+            }
+          />
+
+          <Route
             path="/dashboard-admin"
             element={
               <PrivateAdmin>
@@ -172,6 +178,31 @@ function App() {
               <PrivateAdmin>
                 <SetingAntrian />
               </PrivateAdmin>
+            }
+          />
+          {/* super admin */}
+          <Route
+            path="/dashboard-super-admin"
+            element={
+              <PrivateSuperAdmin>
+                <DashboardSuperAdmin />
+              </PrivateSuperAdmin>
+            }
+          />
+          <Route
+            path="/daftar-klinik"
+            element={
+              <PrivateSuperAdmin>
+                <DaftarKlinik />
+              </PrivateSuperAdmin>
+            }
+          />
+          <Route
+            path="/akun-super-admin"
+            element={
+              <PrivateSuperAdmin>
+                <AkunSuperAdmin />
+              </PrivateSuperAdmin>
             }
           />
         </Routes>
